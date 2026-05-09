@@ -1,417 +1,2037 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
-<title>Away Game — Christian Parent’s Playbook</title>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>BECOMING</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #f8f9fa; font-family: 'DM Sans', system-ui, sans-serif; color: #1a1a1a; line-height: 1.6; }
-button { cursor: pointer; }
-.progress-bar { height: 10px; background: #e9ecef; border-radius: 9999px; overflow: hidden; }
-.progress-fill { height: 100%; transition: width 0.5s ease; }
-.team-card { background: #fff; border: 1px solid #dee2e6; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
-.delete-btn { background: #fee2e2; color: #ef4444; border: none; width: 32px; height: 32px; border-radius: 8px; font-size: 18px; }
+:root {
+  --leather-dark:   #1c120a;
+  --leather-mid:    #2e1e0f;
+  --leather-light:  #4a2e18;
+  --leather-accent: #6b3d1e;
+  --gold:           #c9a84c;
+  --gold-light:     #e8c87a;
+  --gold-dim:       #8a6a2a;
+  --parchment:      #f5edd8;
+  --parchment-dark: #ede0c4;
+  --parchment-mid:  #e4d4aa;
+  --ink:            #2a1f0e;
+  --ink-mid:        #4a3520;
+  --ink-light:      #6b5030;
+  --ink-faint:      #9a7d5a;
+  --red-ember:      #8b2500;
+  --success:        #2d5a1b;
+  --tab-h:          58px;
+  --header-h:       68px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'EB Garamond',Georgia,serif;background:var(--leather-dark);color:var(--ink);font-size:16px;line-height:1.6;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:0.6;}
+
+#app{position:relative;z-index:1;display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;background:var(--leather-dark);box-shadow:0 0 60px rgba(0,0,0,0.8);}
+
+/* HEADER */
+#header{height:var(--header-h);background:linear-gradient(180deg,var(--leather-mid) 0%,var(--leather-dark) 100%);border-bottom:1px solid var(--gold-dim);display:flex;align-items:center;justify-content:space-between;padding:0 18px;flex-shrink:0;position:relative;}
+#header::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.header-title{font-family:'Cinzel',serif;font-size:20px;letter-spacing:5px;color:var(--gold);text-shadow:0 0 20px rgba(201,168,76,0.3);}
+.header-subtitle{font-family:'EB Garamond',serif;font-size:10px;font-style:italic;color:var(--ink-faint);letter-spacing:1px;margin-top:1px;}
+.streak-badge{display:flex;align-items:center;gap:5px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:20px;padding:4px 10px;font-size:12px;color:var(--gold-light);font-family:'EB Garamond',serif;}
+
+/* CONTENT */
+#content{flex:1;overflow-y:auto;overflow-x:hidden;background:var(--parchment);position:relative;}
+#content::-webkit-scrollbar{width:4px;}
+#content::-webkit-scrollbar-track{background:var(--parchment-dark);}
+#content::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px;}
+
+/* TABS */
+#tabs{height:var(--tab-h);background:var(--leather-dark);border-top:1px solid var(--gold-dim);display:flex;flex-shrink:0;overflow-x:auto;position:relative;}
+#tabs::-webkit-scrollbar{display:none;}
+#tabs::before{content:'';position:absolute;top:-2px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}
+.tab-btn{flex:0 0 auto;min-width:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:var(--ink-faint);cursor:pointer;transition:color 0.2s;padding:6px 8px;position:relative;font-family:'EB Garamond',serif;}
+.tab-btn::after{content:'';position:absolute;top:0;left:15%;right:15%;height:2px;background:var(--gold);transform:scaleX(0);transition:transform 0.25s ease;border-radius:0 0 2px 2px;}
+.tab-btn.active{color:var(--gold-light);}
+.tab-btn.active::after{transform:scaleX(1);}
+.tab-icon{font-size:16px;line-height:1;}
+.tab-label{font-size:8px;letter-spacing:0.5px;text-transform:uppercase;white-space:nowrap;}
+
+/* PAGES */
+.page{display:none;padding:20px 18px 28px;min-height:100%;position:relative;z-index:1;animation:pageIn 0.25s ease;}
+.page.active{display:block;}
+@keyframes pageIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+
+/* TYPOGRAPHY */
+.page-heading{font-family:'Playfair Display',serif;font-size:24px;color:var(--ink);margin-bottom:3px;line-height:1.2;}
+.page-subheading{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;color:var(--ink-faint);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--parchment-mid);}
+.section-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--gold-dim);text-transform:uppercase;margin-bottom:8px;margin-top:24px;}
+
+/* CARDS */
+.card{background:#fff8ec;border:1px solid var(--parchment-mid);border-radius:6px;padding:16px;margin-bottom:12px;position:relative;box-shadow:0 2px 8px rgba(42,31,14,0.07),inset 0 1px 0 rgba(255,255,255,0.6);}
+.card::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;background:linear-gradient(180deg,var(--gold),var(--gold-dim));border-radius:0 2px 2px 0;}
+.card-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--ink);margin-bottom:5px;}
+.card-body{font-size:14px;color:var(--ink-mid);line-height:1.65;}
+.card-meta{font-size:11px;color:var(--ink-faint);font-style:italic;margin-top:6px;}
+.card-accent{border-color:var(--gold-dim);}
+.card-accent::before{background:linear-gradient(180deg,var(--gold-light),var(--gold));}
+
+/* QUOTE BLOCK */
+.quote-block{background:linear-gradient(135deg,var(--leather-dark),var(--leather-mid));border-radius:8px;padding:20px 20px 16px 26px;margin-bottom:16px;position:relative;overflow:hidden;}
+.quote-block::before{content:'\201C';position:absolute;top:-8px;left:10px;font-family:'Playfair Display',serif;font-size:72px;color:var(--gold);opacity:0.2;line-height:1;}
+.quote-block::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-dim),transparent);}
+.quote-text{font-family:'Playfair Display',serif;font-style:italic;font-size:14px;color:var(--parchment);line-height:1.7;position:relative;z-index:1;}
+.quote-attr{font-family:'EB Garamond',serif;font-size:11px;color:var(--gold-dim);margin-top:8px;letter-spacing:1px;position:relative;z-index:1;}
+
+/* DOMAIN BARS */
+.domain-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.domain-name{font-size:11px;color:var(--ink-mid);width:115px;flex-shrink:0;font-style:italic;}
+.domain-bar-bg{flex:1;height:5px;background:var(--parchment-mid);border-radius:3px;overflow:hidden;}
+.domain-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:3px;transition:width 0.6s ease;}
+.domain-score{font-size:10px;color:var(--ink-faint);width:26px;text-align:right;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 20px;border-radius:4px;border:none;cursor:pointer;font-family:'EB Garamond',serif;font-size:15px;transition:all 0.2s;}
+.btn-primary{background:linear-gradient(135deg,var(--leather-mid),var(--leather-dark));color:var(--gold-light);border:1px solid var(--gold-dim);box-shadow:0 2px 8px rgba(0,0,0,0.3);}
+.btn-primary:hover{background:linear-gradient(135deg,var(--leather-light),var(--leather-mid));color:var(--gold);border-color:var(--gold);}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
+.btn-ghost{background:transparent;color:var(--ink-mid);border:1px solid var(--parchment-mid);}
+.btn-ghost:hover{border-color:var(--ink-faint);color:var(--ink);}
+.btn-danger{background:transparent;color:var(--red-ember);border:1px solid rgba(139,37,0,0.3);}
+.btn-block{display:flex;width:100%;}
+
+/* TOGGLE */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--parchment-mid);}
+.toggle-label{font-size:15px;color:var(--ink);}
+.toggle-desc{font-size:11px;color:var(--ink-faint);font-style:italic;margin-top:1px;}
+.toggle-switch{width:42px;height:23px;background:var(--parchment-mid);border-radius:12px;cursor:pointer;position:relative;transition:background 0.25s;flex-shrink:0;border:none;}
+.toggle-switch.on{background:var(--gold-dim);}
+.toggle-knob{position:absolute;top:3px;left:3px;width:17px;height:17px;background:#fff;border-radius:50%;transition:left 0.25s;box-shadow:0 1px 4px rgba(0,0,0,0.3);pointer-events:none;}
+.toggle-switch.on .toggle-knob{left:22px;}
+
+/* INPUT */
+.input-field{width:100%;padding:10px 13px;background:#fff8ec;border:1px solid var(--parchment-mid);border-radius:4px;font-family:'EB Garamond',serif;font-size:15px;color:var(--ink);outline:none;transition:border-color 0.2s;}
+.input-field:focus{border-color:var(--gold-dim);box-shadow:0 0 0 2px rgba(201,168,76,0.1);}
+.input-label{font-size:10px;letter-spacing:1.5px;color:var(--ink-faint);text-transform:uppercase;margin-bottom:5px;display:block;font-family:'Cinzel',serif;}
+
+/* FAITH BANNER */
+.faith-banner{background:linear-gradient(135deg,#1a0f05,#2a1a08);border:1px solid rgba(201,168,76,0.2);border-radius:6px;padding:14px 16px;margin-bottom:14px;display:flex;gap:12px;align-items:flex-start;}
+.faith-banner-icon{font-size:20px;flex-shrink:0;margin-top:2px;}
+.faith-banner-text{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;color:var(--parchment-dark);line-height:1.6;}
+.faith-banner-cta{font-size:11px;color:var(--gold-dim);text-decoration:underline;cursor:pointer;display:block;margin-top:5px;}
+.faith-banner-cta:hover{color:var(--gold);}
+
+/* PLAYBOOK CARD */
+.play-card{background:#fff8ec;border:1px solid var(--parchment-mid);border-radius:6px;margin-bottom:10px;overflow:hidden;}
+.play-card-header{background:linear-gradient(135deg,var(--leather-dark),var(--leather-mid));padding:12px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+.play-card-title{font-family:'Playfair Display',serif;font-size:14px;color:var(--parchment);line-height:1.3;}
+.play-card-tag{font-size:10px;color:var(--gold-dim);font-family:'Cinzel',serif;letter-spacing:1px;white-space:nowrap;margin-left:8px;}
+.play-card-body{padding:14px 16px;display:none;}
+.play-card-body.open{display:block;}
+.play-card-body .card-body{font-size:13px;}
+
+/* LESSON CARD */
+.lesson-card{background:#fff8ec;border:1px solid var(--parchment-mid);border-radius:6px;margin-bottom:10px;overflow:hidden;}
+.lesson-card-header{padding:14px 16px;cursor:pointer;display:flex;gap:12px;align-items:flex-start;}
+.lesson-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+.lesson-meta{font-size:10px;color:var(--ink-faint);font-style:italic;margin-top:3px;}
+.lesson-body{padding:0 16px 14px;display:none;}
+.lesson-body.open{display:block;}
+.lesson-principle{background:linear-gradient(135deg,var(--leather-dark),var(--leather-mid));border-radius:6px;padding:14px;margin-bottom:10px;}
+.lesson-principle-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--gold-dim);margin-bottom:6px;}
+.lesson-principle-text{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:var(--parchment);line-height:1.6;}
+.lesson-field{background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.15);border-radius:4px;padding:10px 12px;margin-bottom:8px;}
+.lesson-field-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--gold-dim);margin-bottom:4px;}
+.lesson-field-text{font-size:13px;color:var(--ink-mid);line-height:1.6;}
+.lesson-complete-btn{margin-top:10px;}
+.lesson-done{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--success);font-style:italic;margin-top:8px;}
+
+/* EXPECTATIONS */
+.expect-category{margin-bottom:20px;}
+.expect-category-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--ink);border-bottom:1px solid var(--parchment-mid);padding-bottom:6px;margin-bottom:10px;}
+.expect-item{background:#fff8ec;border:1px solid var(--parchment-mid);border-radius:4px;padding:10px 12px;margin-bottom:6px;position:relative;}
+.expect-item::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--gold-dim);border-radius:0 1px 1px 0;}
+.expect-item-text{font-size:13px;color:var(--ink-mid);line-height:1.5;}
+.expect-item-date{font-size:10px;color:var(--ink-faint);font-style:italic;margin-top:3px;}
+.expect-delete{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;font-size:14px;color:var(--ink-faint);opacity:0.5;}
+.expect-delete:hover{opacity:1;color:var(--red-ember);}
+
+/* MISSION BLOCK */
+.mission-display{background:linear-gradient(135deg,var(--leather-dark),var(--leather-mid));border-radius:8px;padding:22px;margin-bottom:14px;position:relative;overflow:hidden;}
+.mission-display::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-dim),transparent);}
+.mission-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:3px;color:var(--gold-dim);margin-bottom:8px;}
+.mission-text{font-family:'Playfair Display',serif;font-style:italic;font-size:15px;color:var(--parchment);line-height:1.7;}
+.mission-empty{font-size:13px;color:rgba(245,237,216,0.35);font-style:italic;}
+
+/* STAR RATING */
+.star{font-size:26px;cursor:pointer;color:var(--parchment-mid);transition:color 0.15s;}
+.star.lit{color:var(--gold);}
+
+/* ORNAMENT */
+.ornament-divider{text-align:center;margin:20px 0;color:var(--gold-dim);font-size:13px;letter-spacing:5px;position:relative;}
+.ornament-divider::before,.ornament-divider::after{content:'';position:absolute;top:50%;width:32%;height:1px;background:linear-gradient(90deg,transparent,var(--parchment-mid));}
+.ornament-divider::before{left:0;}
+.ornament-divider::after{right:0;background:linear-gradient(90deg,var(--parchment-mid),transparent);}
+
+.save-reminder{background:rgba(42,31,14,0.06);border:1px solid var(--parchment-mid);border-radius:4px;padding:9px 12px;font-size:11px;color:var(--ink-faint);font-style:italic;text-align:center;margin-top:16px;}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:5px;background:#fff8ec;border:1px solid var(--parchment-mid);border-radius:20px;padding:4px 11px;font-size:11px;color:var(--ink-mid);}
+
+/* RADAR CHART */
+#radar-wrap{display:flex;justify-content:center;align-items:center;padding:8px 0 4px;}
+#radar-canvas{display:block;max-width:100%;}
+
+/* MILESTONE CARDS */
+.milestone-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px;}
+.milestone-card{background:#fff8ec;border:1px solid var(--parchment-mid);border-radius:8px;padding:14px 12px;text-align:center;position:relative;overflow:hidden;transition:all 0.2s;}
+.milestone-card.earned{border-color:var(--gold-dim);background:linear-gradient(135deg,#fffbef,#fff8ec);}
+.milestone-card.earned::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold-dim),var(--gold));}
+.milestone-card.locked{opacity:0.45;}
+.milestone-icon{font-size:26px;margin-bottom:6px;display:block;}
+.milestone-name{font-family:'Playfair Display',serif;font-size:12px;color:var(--ink);margin-bottom:2px;line-height:1.3;}
+.milestone-desc{font-size:10px;color:var(--ink-faint);font-style:italic;line-height:1.4;}
+.milestone-earned-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--gold-dim);margin-top:5px;}
+
+/* SCRIPTURE WIDGET */
+.scripture-block{background:linear-gradient(135deg,#0e0905,#1c1208);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:18px 20px;margin-bottom:14px;position:relative;overflow:hidden;}
+.scripture-block::before{content:'\271D';position:absolute;top:-4px;right:14px;font-size:52px;color:var(--gold);opacity:0.08;line-height:1;}
+.scripture-ref{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--gold-dim);margin-bottom:8px;}
+.scripture-text{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:var(--parchment);line-height:1.75;position:relative;z-index:1;}
+
+/* TOAST NOTIFICATION */
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--leather-mid);border:1px solid var(--gold-dim);border-radius:8px;padding:10px 20px;font-family:'EB Garamond',serif;font-size:14px;color:var(--gold-light);z-index:500;opacity:0;transition:all 0.3s;pointer-events:none;white-space:nowrap;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* LEVEL BADGE */
+.level-ring{display:flex;flex-direction:column;align-items:center;justify-content:center;width:72px;height:72px;border-radius:50%;border:2px solid var(--gold-dim);background:linear-gradient(135deg,var(--leather-mid),var(--leather-dark));flex-shrink:0;}
+.level-num{font-family:'Cinzel',serif;font-size:22px;color:var(--gold);line-height:1;}
+.level-word{font-family:'Cinzel',serif;font-size:7px;letter-spacing:1px;color:var(--gold-dim);}
+.level-bar-bg{flex:1;height:6px;background:var(--parchment-mid);border-radius:3px;overflow:hidden;}
+.level-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:3px;transition:width 0.8s ease;}
+
+/* WELCOME */
+#welcome{position:fixed;inset:0;z-index:100;background:var(--leather-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 28px;text-align:center;}
+.welcome-ornament{font-size:44px;margin-bottom:20px;animation:flicker 3s ease-in-out infinite;}
+@keyframes flicker{0%,100%{opacity:1;}50%{opacity:0.82;}}
+.welcome-title{font-family:'Cinzel',serif;font-size:34px;letter-spacing:9px;color:var(--gold);text-shadow:0 0 30px rgba(201,168,76,0.4);margin-bottom:7px;}
+.welcome-subtitle{font-family:'Playfair Display',serif;font-style:italic;font-size:14px;color:var(--ink-faint);letter-spacing:1px;margin-bottom:40px;line-height:1.5;}
+.welcome-divider{width:100px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);margin:0 auto 34px;}
+.welcome-prompt{font-family:'EB Garamond',serif;font-size:15px;color:var(--parchment-dark);margin-bottom:18px;font-style:italic;}
+.welcome-name-input{width:100%;max-width:300px;padding:13px 16px;background:rgba(245,237,216,0.08);border:1px solid var(--gold-dim);border-radius:4px;font-family:'Playfair Display',serif;font-size:17px;color:var(--parchment);text-align:center;outline:none;margin-bottom:14px;}
+.welcome-name-input:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(201,168,76,0.15);}
+.welcome-name-input::placeholder{color:rgba(245,237,216,0.25);font-style:italic;}
+.welcome-faith-row{display:flex;align-items:center;gap:12px;margin:16px 0 28px;padding:14px 18px;background:rgba(245,237,216,0.05);border:1px solid rgba(201,168,76,0.15);border-radius:6px;width:100%;max-width:300px;text-align:left;}
+.welcome-faith-label{flex:1;font-family:'EB Garamond',serif;font-size:13px;color:var(--parchment-dark);font-style:italic;}
+
+/* ══ COACH STYLES ══════════════════════════════════════ */
+.coach-page-wrap{display:flex;flex-direction:column;min-height:calc(100vh - var(--header-h) - var(--tab-h));}
+.coach-disabled-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:360px;text-align:center;padding:32px 24px;}
+.coach-header{display:flex;justify-content:space-between;align-items:flex-start;padding:18px 18px 10px;border-bottom:1px solid var(--parchment-mid);margin:-20px -18px 0;background:linear-gradient(180deg,#fff8ec,var(--parchment));}
+.coach-messages-wrap{padding:16px 18px 8px;flex:1;}
+.coach-bubble-wrap{display:flex;flex-direction:column;margin-bottom:14px;}
+.coach-bubble-wrap.user{align-items:flex-end;}
+.coach-bubble-wrap.assistant{align-items:flex-start;}
+.coach-sender{font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--gold-dim);margin-bottom:4px;}
+.coach-bubble{max-width:88%;border-radius:10px;padding:13px 15px;font-size:14px;line-height:1.7;font-family:'EB Garamond',serif;position:relative;}
+.coach-bubble.user{background:linear-gradient(135deg,var(--leather-mid),var(--leather-dark));color:var(--parchment);border:1px solid var(--gold-dim);}
+.coach-bubble.assistant{background:#fff8ec;border:1px solid var(--parchment-mid);color:var(--ink-mid);}
+.coach-bubble.assistant::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:3px;background:linear-gradient(180deg,var(--gold),var(--gold-dim));border-radius:0 2px 2px 0;}
+.coach-typing-wrap{padding:0 18px 10px;display:none;}
+.coach-typing{display:flex;gap:5px;padding:12px 15px;background:#fff8ec;border:1px solid var(--parchment-mid);border-radius:10px;width:62px;}
+.coach-dot{width:7px;height:7px;background:var(--gold-dim);border-radius:50%;animation:coachBounce 1.2s ease-in-out infinite;}
+.coach-dot:nth-child(2){animation-delay:0.22s;}
+.coach-dot:nth-child(3){animation-delay:0.44s;}
+@keyframes coachBounce{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-7px);}}
+.coach-input-bar{display:flex;gap:8px;align-items:flex-end;padding:10px 18px 12px;background:var(--parchment-dark);border-top:1px solid var(--parchment-mid);position:sticky;bottom:0;margin:0 -18px -28px;}
+.coach-disclaimer{font-size:10px;color:var(--ink-faint);font-style:italic;text-align:center;padding:6px 18px 0;margin:0 -18px;}
+
+/* ══ COMMITMENT STYLES ═════════════════════════════════ */
+.commit-stat{flex:1;text-align:center;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.12);border-radius:6px;padding:10px 6px;}
+.commit-stat-num{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);line-height:1.1;}
+.commit-stat-label{font-size:9px;color:var(--ink-faint);letter-spacing:1px;font-family:'Cinzel',serif;margin-top:3px;}
+.commit-day-dot{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:8px;font-family:'Cinzel',serif;flex-shrink:0;transition:all 0.2s;}
+.commit-complete-bar{background:linear-gradient(180deg,var(--leather-dark),var(--leather-mid));border-radius:6px;padding:16px;text-align:center;}
+
+@media(min-width:481px) and (max-width:767px){#app{border-left:1px solid rgba(201,168,76,0.15);border-right:1px solid rgba(201,168,76,0.15);}}
+
+/* ══ SIDEBAR — DESKTOP ══════════════════════════════════ */
+#sidebar{display:none;width:220px;flex-shrink:0;background:linear-gradient(180deg,var(--leather-mid) 0%,var(--leather-dark) 100%);border-right:1px solid var(--gold-dim);flex-direction:column;height:100vh;overflow-y:auto;}
+.sidebar-logo{padding:28px 22px 22px;border-bottom:1px solid rgba(201,168,76,0.18);position:relative;}
+.sidebar-logo::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}
+.sidebar-title{font-family:'Cinzel',serif;font-size:15px;letter-spacing:5px;color:var(--gold);text-shadow:0 0 20px rgba(201,168,76,0.3);margin-bottom:5px;}
+.sidebar-subtitle{font-family:'EB Garamond',serif;font-size:10px;font-style:italic;color:var(--ink-faint);line-height:1.5;letter-spacing:0.5px;}
+.sidebar-nav{flex:1;padding:10px 0;overflow-y:auto;}
+.sidebar-btn{display:flex;align-items:center;gap:13px;width:100%;padding:11px 22px;background:none;border:none;border-left:3px solid transparent;color:var(--ink-faint);cursor:pointer;font-family:'EB Garamond',serif;font-size:14px;text-align:left;transition:all 0.18s;}
+.sidebar-btn:hover{color:var(--parchment-dark);background:rgba(201,168,76,0.06);border-left-color:rgba(201,168,76,0.3);}
+.sidebar-btn.active{color:var(--gold-light);background:rgba(201,168,76,0.1);border-left-color:var(--gold);}
+.sidebar-btn-icon{font-size:15px;flex-shrink:0;}
+.sidebar-btn-label{font-size:13px;}
+.sidebar-footer{padding:16px 20px 22px;border-top:1px solid rgba(201,168,76,0.15);}
+.sidebar-rank{font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--gold-dim);margin-bottom:6px;display:block;}
+.sidebar-level-bar{height:3px;background:rgba(201,168,76,0.12);border-radius:2px;overflow:hidden;margin-bottom:10px;}
+.sidebar-level-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:2px;transition:width 0.8s ease;}
+.sidebar-streak{display:flex;align-items:center;gap:6px;font-family:'EB Garamond',serif;font-size:12px;color:var(--gold-light);background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:16px;padding:4px 10px;}
+
+/* ══ DESKTOP LAYOUT ════════════════════════════════════ */
+@media(min-width:768px){
+  #app{flex-direction:row;max-width:1280px;height:100vh;box-shadow:0 0 80px rgba(0,0,0,0.9);}
+  #sidebar{display:flex;}
+  #header{display:none;}
+  #tabs{display:none;}
+  #content{flex:1;background:var(--parchment);}
+  .page{padding:32px 44px 48px;}
+  #page-coach{padding:0;}
+  #page-coach .coach-header{padding:20px 28px 14px;}
+  #page-coach .coach-messages-wrap{padding:16px 28px 8px;}
+  #page-coach .coach-typing-wrap{padding:0 28px 10px;}
+  #page-coach .coach-disclaimer{padding:6px 28px 0;margin:0;}
+  #page-coach .coach-input-bar{margin:0;padding:12px 28px 16px;}
+}
 </style>
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel" data-presets="react">
-const { useState } = React;
 
-// ─── STORAGE ──────────────────────────────────────────────────────────────────
-function load(key, fb) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fb; } catch { return fb; } }
-function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
-let _c = Date.now();
-function uid() { return "x" + (++_c).toString(36); }
+<div id="toast"></div>
 
-// ─── COLORS ───────────────────────────────────────────────────────────────────
-const C = {
-  bg0: "#f8f9fa", bg1: "#ffffff", bg2: "#f1f3f5", bg3: "#e9ecef",
-  border: "#dee2e6", borderHi: "#ff8c00",
-  text: "#1a1a1a", textSub: "#495057", textMuted: "#6c757d",
-  orange: "#ff8c00", green: "#00b36b"
+<!-- WELCOME -->
+<div id="welcome">
+  <div class="welcome-ornament">📖</div>
+  <div class="welcome-title">BECOMING</div>
+  <div class="welcome-subtitle">Leaders are not born,<br>they become.</div>
+  <div class="welcome-divider"></div>
+  <div class="welcome-prompt">What shall I call you?</div>
+  <input class="welcome-name-input" id="welcome-name" type="text" placeholder="Your name..." maxlength="30" autocomplete="off">
+  <div class="welcome-faith-row">
+    <div class="welcome-faith-label">Include faith-based content &amp; scripture?</div>
+    <button class="toggle-switch" id="welcome-faith-toggle" onclick="toggleWelcomeFaith()"><div class="toggle-knob"></div></button>
+  </div>
+  <button class="btn btn-primary" onclick="completeWelcome()" style="min-width:200px;font-size:16px;padding:13px 26px;">Begin the Journey</button>
+  <div style="margin-top:18px;font-size:11px;color:var(--ink-faint);font-style:italic;max-width:260px;line-height:1.6;">Your data stays on this device. Export from Settings to back it up.</div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;">
+
+  <!-- SIDEBAR (desktop only) -->
+  <div id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-title">BECOMING</div>
+      <div class="sidebar-subtitle">Leaders are not born,<br>they become.</div>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="sidebar-btn active" onclick="switchTab('dashboard')" id="stab-dashboard"><span class="sidebar-btn-icon">🏠</span><span class="sidebar-btn-label">Home</span></button>
+      <button class="sidebar-btn" onclick="switchTab('learn')" id="stab-learn"><span class="sidebar-btn-icon">📚</span><span class="sidebar-btn-label">Library</span></button>
+      <button class="sidebar-btn" onclick="switchTab('challenges')" id="stab-challenges"><span class="sidebar-btn-icon">⚔</span><span class="sidebar-btn-label">Daily Challenge</span></button>
+      <button class="sidebar-btn" onclick="switchTab('playbook')" id="stab-playbook"><span class="sidebar-btn-icon">🎯</span><span class="sidebar-btn-label">Playbook</span></button>
+      <button class="sidebar-btn" onclick="switchTab('expect')" id="stab-expect"><span class="sidebar-btn-icon">📐</span><span class="sidebar-btn-label">Expectations</span></button>
+      <button class="sidebar-btn" onclick="switchTab('growth')" id="stab-growth"><span class="sidebar-btn-icon">📈</span><span class="sidebar-btn-label">Growth</span></button>
+      <button class="sidebar-btn" onclick="switchTab('journal')" id="stab-journal"><span class="sidebar-btn-icon">✍</span><span class="sidebar-btn-label">Journal</span></button>
+      <button class="sidebar-btn" onclick="switchTab('settings')" id="stab-settings"><span class="sidebar-btn-icon">⚙</span><span class="sidebar-btn-label">Settings</span></button>
+    </nav>
+    <div class="sidebar-footer">
+      <span class="sidebar-rank" id="sidebar-rank-label">Recruit · 0 XP</span>
+      <div class="sidebar-level-bar"><div class="sidebar-level-fill" id="sidebar-level-fill" style="width:0%"></div></div>
+      <div class="sidebar-streak">🔥 <span id="sidebar-streak-display">0 days</span></div>
+    </div>
+  </div>
+
+  <div id="header">
+    <div>
+      <div class="header-title">BECOMING</div>
+      <div class="header-subtitle">Leaders are not born, they become.</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="streak-badge">🔥 <span id="streak-display">0 days</span></div>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="page active" id="page-dashboard">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:4px;">
+        <div class="level-ring" id="dash-level-ring">
+          <div class="level-num" id="dash-level-num">1</div>
+          <div class="level-word">LEVEL</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--ink);margin-bottom:2px;" id="greeting-name">Good morning.</div>
+          <div style="font-size:11px;color:var(--ink-faint);font-style:italic;margin-bottom:8px;" id="greeting-date"></div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="level-bar-bg"><div class="level-bar-fill" id="dash-level-bar" style="width:0%"></div></div>
+            <div style="font-size:10px;color:var(--ink-faint);white-space:nowrap;" id="dash-xp-label">0 XP</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="dash-scripture" style="display:none;margin-top:16px;"></div>
+
+      <div class="quote-block" id="dash-quote" style="margin-top:14px;">
+        <div class="quote-text" id="dash-quote-text"></div>
+        <div class="quote-attr" id="dash-quote-attr"></div>
+      </div>
+
+      <div class="section-label">The Spark for Today</div>
+      <div style="background:linear-gradient(135deg,#1a0a02,#2e1a08);border-radius:8px;padding:18px;margin-bottom:16px;border:1px solid rgba(201,168,76,0.15);">
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--gold-dim);margin-bottom:8px;">DAILY SPARK</div>
+        <div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--parchment);margin-bottom:6px;line-height:1.5;" id="spark-text"></div>
+        <div style="font-size:11px;color:var(--gold-dim);font-style:italic;" id="spark-source"></div>
+        <button class="btn btn-ghost" onclick="switchTab('challenges')" style="margin-top:12px;font-size:12px;padding:6px 14px;color:var(--gold-dim);border-color:rgba(201,168,76,0.25);">Today's Challenge →</button>
+      </div>
+
+      <div class="section-label">Leadership Radar</div>
+      <div class="card" style="padding:12px 8px 8px;">
+        <div id="radar-wrap"><canvas id="radar-canvas" width="300" height="300"></canvas></div>
+        <div class="card-meta" style="text-align:right;cursor:pointer;margin-top:4px;" onclick="switchTab('growth')">Full tracker & check-in →</div>
+      </div>
+
+      <div id="faith-nudge" style="display:none;">
+        <div class="faith-banner">
+          <div class="faith-banner-icon">✝</div>
+          <div>
+            <div class="faith-banner-text">Many leaders find their deepest growth happens when faith is part of the journey. It's here when you're ready.</div>
+            <span class="faith-banner-cta" onclick="enableFaith()">Turn on faith-based content →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Milestones</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;" id="badge-row"></div>
+
+      <div class="ornament-divider">✦ ✦ ✦</div>
+      <div style="text-align:center;font-size:12px;color:var(--ink-faint);font-style:italic;padding-bottom:8px;">"Be the spark today. Just the spark."</div>
+    </div>
+
+    <!-- ══ LEARN ══ -->
+    <div class="page" id="page-learn">
+      <div class="page-heading">The Library</div>
+      <div class="page-subheading">Every mentor distilled into principle, application, and action.</div>
+      <div class="section-label">Fire Officer Track</div>
+      <div id="learn-fire"></div>
+      <div class="section-label" style="margin-top:28px;">Leadership Track</div>
+      <div id="learn-leadership"></div>
+      <div id="faith-track-section" style="display:none;">
+        <div class="section-label" style="margin-top:28px;">Faith Track</div>
+        <div id="learn-faith"></div>
+      </div>
+      <div id="faith-learn-nudge" style="display:none;margin-top:14px;">
+        <div class="faith-banner">
+          <div class="faith-banner-icon">✝</div>
+          <div>
+            <div class="faith-banner-text">A faith track is available — Groeschel, Stanley, Chambers, Lewis, and more.</div>
+            <span class="faith-banner-cta" onclick="enableFaith()">Unlock faith content →</span>
+          </div>
+        </div>
+      </div>
+      <div class="save-reminder">💾 Export your progress regularly from Settings.</div>
+    </div>
+
+    <!-- ══ CHALLENGES ══ -->
+    <div class="page" id="page-challenges">
+      <div class="page-heading">Daily Challenge</div>
+      <div class="page-subheading">One principle. One action. One day at a time.</div>
+      <div class="quote-block">
+        <div class="quote-text" id="ch-quote"></div>
+        <div class="quote-attr" id="ch-quote-attr"></div>
+      </div>
+      <div class="card card-accent">
+        <div class="card-title" id="ch-title"></div>
+        <div class="card-body" id="ch-body"></div>
+        <div class="card-meta" id="ch-domain"></div>
+      </div>
+      <div class="section-label">Field Application</div>
+      <div class="card"><div class="card-body" id="ch-application"></div></div>
+      <div id="ch-rate-section">
+        <div class="section-label">Rate Yourself</div>
+        <div class="card" style="padding-bottom:10px;">
+          <div class="card-body" style="margin-bottom:12px;">How well did you embody this today?</div>
+          <div style="display:flex;gap:8px;margin-bottom:14px;" id="ch-stars">
+            <span class="star" onclick="setRating(1)">★</span>
+            <span class="star" onclick="setRating(2)">★</span>
+            <span class="star" onclick="setRating(3)">★</span>
+            <span class="star" onclick="setRating(4)">★</span>
+            <span class="star" onclick="setRating(5)">★</span>
+          </div>
+          <textarea class="input-field" id="ch-note" rows="3" placeholder="Reflection..." style="resize:none;margin-bottom:12px;"></textarea>
+          <button class="btn btn-primary btn-block" onclick="completeChallenge()">Mark Complete ✓</button>
+        </div>
+      </div>
+      <div id="ch-done-section" style="display:none;">
+        <div class="card" style="text-align:center;border-color:var(--gold-dim);">
+          <div style="font-size:26px;margin-bottom:6px;">✓</div>
+          <div class="card-title">Done for today.</div>
+          <div class="card-body" id="ch-done-note" style="font-style:italic;margin-top:4px;"></div>
+          <div class="card-meta" id="ch-done-rating"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PLAYBOOK ══ -->
+    <div class="page" id="page-playbook">
+      <div class="page-heading">Leader's Playbook</div>
+      <div class="page-subheading">Specific plays for specific moments. Inspiration and tools for you and your crew.</div>
+      <div class="section-label">Daily Sparks — For You</div>
+      <div id="spark-cards"></div>
+      <div class="section-label" style="margin-top:28px;">Crew Inspiration Plays</div>
+      <div class="card-body" style="font-size:13px;color:var(--ink-faint);font-style:italic;margin-bottom:10px;">Specific techniques to motivate, develop, and pour into your people.</div>
+      <div id="play-cards"></div>
+      <div class="section-label" style="margin-top:28px;">One-on-One Tools</div>
+      <div id="oneonone-cards"></div>
+      <div id="faith-play-section" style="display:none;">
+        <div class="section-label" style="margin-top:28px;">Faith-Based Leadership Principles</div>
+        <div id="faith-play-cards"></div>
+      </div>
+    </div>
+
+    <!-- ══ EXPECTATIONS ══ -->
+    <div class="page" id="page-expect">
+      <div class="page-heading">Expectations</div>
+      <div class="page-subheading">You promote what you permit. Define it. Live it. Hold it.</div>
+      <div class="section-label">Personal Mission Statement</div>
+      <div class="mission-display" id="mission-display">
+        <div class="mission-label">PERSONAL MISSION</div>
+        <div class="mission-text" id="mission-text"><span class="mission-empty">Not yet written. Who are you as a leader?</span></div>
+      </div>
+      <div class="card">
+        <textarea class="input-field" id="mission-input" rows="3" placeholder="As a leader, my mission is to..." style="resize:none;margin-bottom:10px;"></textarea>
+        <button class="btn btn-primary btn-block" onclick="saveMission()">Save Mission Statement</button>
+      </div>
+      <div class="section-label" style="margin-top:20px;">Leadership Vision Statement</div>
+      <div class="mission-display" id="vision-display">
+        <div class="mission-label">LEADERSHIP VISION</div>
+        <div class="mission-text" id="vision-text"><span class="mission-empty">Not yet written. Where are you taking your people?</span></div>
+      </div>
+      <div class="card">
+        <textarea class="input-field" id="vision-input" rows="3" placeholder="The team I am building will be known for..." style="resize:none;margin-bottom:10px;"></textarea>
+        <button class="btn btn-primary btn-block" onclick="saveVision()">Save Vision Statement</button>
+      </div>
+      <div class="ornament-divider" style="margin-top:28px;">✦ ✦ ✦</div>
+      <div class="section-label">Commander's Expectations</div>
+      <div style="font-size:13px;color:var(--ink-faint);font-style:italic;margin-bottom:14px;line-height:1.6;">This is your living document — write it, refine it, let it grow with you.</div>
+      <div id="expect-live-display" style="display:none;">
+        <div class="mission-display" style="margin-bottom:10px;">
+          <div class="mission-label">CURRENT EXPECTATIONS — <span id="expect-live-date"></span></div>
+          <div class="mission-text" id="expect-live-text" style="white-space:pre-wrap;font-size:14px;line-height:1.8;"></div>
+        </div>
+        <button class="btn btn-ghost btn-block" onclick="openExpectEditor()" style="margin-bottom:4px;">✏ Edit / Revise</button>
+      </div>
+      <div id="expect-editor" class="card">
+        <div style="font-size:11px;color:var(--ink-faint);font-style:italic;margin-bottom:8px;">Write freely. Every version is preserved below.</div>
+        <textarea class="input-field" id="expect-doc-input" rows="10" placeholder="I expect every person on this crew — including myself — to show up with character, competence, and commitment every single shift." style="resize:vertical;margin-bottom:12px;font-size:14px;line-height:1.7;"></textarea>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary" style="flex:1;" onclick="saveExpectDoc()">Save Version</button>
+          <button class="btn btn-ghost" id="expect-cancel-btn" style="display:none;" onclick="cancelExpectEdit()">Cancel</button>
+        </div>
+      </div>
+      <div id="expect-history-section" style="display:none;">
+        <div class="section-label" style="margin-top:24px;">Version History</div>
+        <div id="expect-history-list"></div>
+      </div>
+      <div class="ornament-divider" style="margin-top:28px;">✦ ✦ ✦</div>
+      <div class="section-label">Crew Development Notes</div>
+      <div style="font-size:13px;color:var(--ink-faint);font-style:italic;margin-bottom:12px;">Individual notes per crew member. Feed the hungry.</div>
+      <div class="card">
+        <label class="input-label">Name</label>
+        <input class="input-field" id="crew-name-input" type="text" placeholder="Crew member name..." style="margin-bottom:10px;">
+        <label class="input-label">Note</label>
+        <textarea class="input-field" id="crew-note-input" rows="2" placeholder="Strength, growth area, development action..." style="resize:none;margin-bottom:10px;"></textarea>
+        <button class="btn btn-primary btn-block" onclick="addCrewNote()">Add Note</button>
+      </div>
+      <div id="crew-notes-list"></div>
+    </div>
+
+    <!-- ══ GROWTH ══ -->
+    <div class="page" id="page-growth">
+      <div class="page-heading">Growth Tracker</div>
+      <div class="page-subheading">Where you are is not where you're going.</div>
+
+      <div class="section-label">Leadership Radar</div>
+      <div class="card" style="padding:12px 8px 8px;">
+        <div id="radar-wrap-full"><canvas id="radar-canvas-full" width="320" height="320"></canvas></div>
+      </div>
+
+      <div class="section-label">Monthly Check-In</div>
+      <div class="card">
+        <div class="card-body" style="margin-bottom:16px;font-style:italic;font-size:13px;">Rate yourself honestly. This is your mirror, not your resume.</div>
+        <div id="growth-sliders"></div>
+        <button class="btn btn-primary btn-block" onclick="saveGrowth()" style="margin-top:14px;">Save Check-In</button>
+      </div>
+
+      <!-- ══ 30-DAY COMMITMENT ══ -->
+      <div class="section-label" style="margin-top:24px;">30-Day Commitment</div>
+      <div id="commitment-section"></div>
+
+      <div class="section-label">Milestones & Badges</div>
+      <div class="milestone-grid" id="milestone-grid"></div>
+
+      <div class="section-label">Check-In History</div>
+      <div id="growth-history"></div>
+    </div>
+
+    <!-- ══ JOURNAL ══ -->
+    <div class="page" id="page-journal">
+      <div class="page-heading">The Journal</div>
+      <div class="page-subheading">Write what you wouldn't say out loud yet.</div>
+      <div class="section-label">New Entry</div>
+      <div class="card">
+        <input class="input-field" id="j-title" type="text" placeholder="Entry title..." style="margin-bottom:8px;">
+        <textarea class="input-field" id="j-body" rows="6" placeholder="Write here..." style="resize:vertical;margin-bottom:10px;"></textarea>
+        <button class="btn btn-primary btn-block" onclick="saveJournal()">Save Entry</button>
+      </div>
+      <div class="section-label">Previous Entries</div>
+      <div id="journal-list"></div>
+    </div>
+
+      <!-- Active state -->
+      <div id="coach-active" style="display:none;flex-direction:column;">
+        <div class="coach-header">
+          <div style="padding-left:0;">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--ink);margin-bottom:2px;">Leadership Coach</div>
+            <div style="font-size:10px;color:var(--ink-faint);font-style:italic;">Session only · Not saved</div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-ghost" onclick="newCoachSession()" style="font-size:11px;padding:5px 10px;">New Session</button>
+            <button class="btn btn-ghost" onclick="disableCoach()" style="font-size:11px;padding:5px 10px;">Disable</button>
+          </div>
+        </div>
+
+
+    <!-- ══ SETTINGS ══ -->
+    <div class="page" id="page-settings">
+      <div class="page-heading">Settings</div>
+      <div class="page-subheading">Your journey, your way.</div>
+      <div style="margin-bottom:24px;">
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--gold-dim);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--parchment-mid);">PROFILE</div>
+        <label class="input-label">Your Name</label>
+        <input class="input-field" id="settings-name" type="text" maxlength="30" style="margin-bottom:10px;">
+        <button class="btn btn-ghost btn-block" onclick="saveName()">Update Name</button>
+      </div>
+      <div style="margin-bottom:24px;">
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--gold-dim);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--parchment-mid);">CONTENT</div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">✝ Faith Integration</div><div class="toggle-desc">Scripture, Christian leaders, faith content</div></div>
+          <button class="toggle-switch" id="faith-toggle" onclick="toggleFaith()"><div class="toggle-knob"></div></button>
+        </div>
+      </div>
+      <div style="margin-bottom:24px;">
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--gold-dim);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--parchment-mid);">DATA</div>
+        <div class="save-reminder" style="margin-top:0;margin-bottom:12px;">⚠️ Data lives on this device only. Export regularly.</div>
+        <button class="btn btn-primary btn-block" onclick="exportData()" style="margin-bottom:8px;">📤 Export All Data</button>
+        <label class="btn btn-ghost btn-block" style="cursor:pointer;justify-content:center;">📥 Import Data<input type="file" accept=".json" id="import-file" style="display:none;" onchange="importData(event)"></label>
+      </div>
+      <div style="margin-bottom:24px;">
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--gold-dim);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--parchment-mid);">ABOUT</div>
+        <div class="card">
+          <div class="card-body" style="font-style:italic;line-height:1.8;"><strong>BECOMING</strong> — a leadership development companion for fire officers and leaders in every field.<br><br>Built from the greatest voices in fire service, leadership, and faith. Phase 4.</div>
+          <div class="card-meta">v4.0 — AI Coach · 30-Day Commitment</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--red-ember);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid rgba(139,37,0,0.2);">DANGER ZONE</div>
+        <div style="background:rgba(139,37,0,0.05);border:1px solid rgba(139,37,0,0.15);border-radius:6px;padding:14px;">
+          <div class="card-body" style="color:var(--ink-mid);margin-bottom:10px;font-style:italic;font-size:13px;">Reset all data and start fresh. Cannot be undone.</div>
+          <button class="btn btn-danger btn-block" onclick="confirmReset()">Reset All Data</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- TABS -->
+  <div id="tabs">
+    <button class="tab-btn active" onclick="switchTab('dashboard')" id="tab-dashboard"><span class="tab-icon">🏠</span><span class="tab-label">Home</span></button>
+    <button class="tab-btn" onclick="switchTab('learn')" id="tab-learn"><span class="tab-icon">📚</span><span class="tab-label">Learn</span></button>
+    <button class="tab-btn" onclick="switchTab('challenges')" id="tab-challenges"><span class="tab-icon">⚔</span><span class="tab-label">Challenge</span></button>
+    <button class="tab-btn" onclick="switchTab('playbook')" id="tab-playbook"><span class="tab-icon">🎯</span><span class="tab-label">Playbook</span></button>
+    <button class="tab-btn" onclick="switchTab('expect')" id="tab-expect"><span class="tab-icon">📐</span><span class="tab-label">Expect</span></button>
+    <button class="tab-btn" onclick="switchTab('growth')" id="tab-growth"><span class="tab-icon">📈</span><span class="tab-label">Growth</span></button>
+    <button class="tab-btn" onclick="switchTab('journal')" id="tab-journal"><span class="tab-icon">✍</span><span class="tab-label">Journal</span></button>
+    <button class="tab-btn" onclick="switchTab('settings')" id="tab-settings"><span class="tab-icon">⚙</span><span class="tab-label">Settings</span></button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════
+var S = {
+  userName:'', faithOn:false, streak:0, lastCompleted:null,
+  domains:{'Command Presence':0,'Tactical Knowledge':0,'Accountability':0,'Humility':0,'Communication':0,'Team Development':0,'Character & Integrity':0,'Vision & Purpose':0,'Resilience & Growth':0},
+  growthHistory:[], journal:[], challenges:{}, completedLessons:[],
+  badges:[], mission:'', vision:'', expectations:[], crewNotes:[], expectVersions:[],
+  commitment:{text:'',startDate:'',log:{}}
 };
 
-// ─── VIRTUES (Complete) ───────────────────────────────────────────────────────
-const VIRTUES = {
-  L: { key:"L", label:"Love", icon:"❤️", tagline:"Others-first in a me-first culture", color:"#ff4d4d", bg:"#fff0f0", border:"#ff8c00",
-       scoreMeaning: "0=Never • 1=Rarely • 2=Sometimes • 3=Consistently puts others first",
-       strong: ["Celebrates teammates' success", "Shows genuine kindness", "Puts team above self"],
-       weak:   ["Selfish on and off the field", "Dismisses or ignores teammates", "Only cheers for own highlights"],
-       develop: ["After each game, name one teammate who helped you win", "Do one act of encouragement before you leave the field", "Pray: 'Lord, help me love my teammates the way You love me'"] },
-  P: { key:"P", label:"Peace", icon:"☮️", tagline:"Calm anchored in Christ", color:"#00b36b", bg:"#f0fff4", border:"#ff8c00",
-       scoreMeaning: "0=Constant anxiety • 1=Occasional calm • 2=Usually calm • 3=Peace that guards the heart",
-       strong: ["Stays composed under pressure", "Calms teammates in tense moments", "Bounces back quickly from mistakes"],
-       weak:   ["Anxious or panicked when things go wrong", "Spreads tension to teammates", "Dwells on errors during play"],
-       develop: ["Practice three slow breaths before any big moment", "Write down one worry this week and give it to God in prayer", "Memorize Phil. 4:7 — let it anchor your pregame routine"] },
-  S: { key:"S", label:"Self-Control", icon:"🛡️", tagline:"Responding instead of reacting", color:"#0077cc", bg:"#f0f8ff", border:"#ff8c00",
-       scoreMeaning: "0=Frequent outbursts • 1=Improving • 2=Usually controlled • 3=Strong self-discipline",
-       strong: ["Responds to bad calls without blowing up", "Keeps emotions in check under provocation", "Leads by example in discipline"],
-       weak:   ["Frequent outbursts or meltdowns", "Argues with officials or coaches", "Lets frustration hurt performance"],
-       develop: ["Identify your #1 trigger — name it, then make a plan for it", "After a bad call, count to 5 before you react", "Ask a trusted teammate to hold you accountable this week"] },
-  G: { key:"G", label:"Gentleness", icon:"🌿", tagline:"Strength under control", color:"#9c4dff", bg:"#f8f0ff", border:"#ff8c00",
-       scoreMeaning: "0=Often harsh • 1=Sometimes gentle • 2=Usually gentle • 3=Strength under control",
-       strong: ["Encourages struggling teammates", "Competes hard without being cruel", "Uses words that build up, not tear down"],
-       weak:   ["Often harsh or cutting with words", "Intimidates or belittles others", "Confuses meanness with toughness"],
-       develop: ["Before criticizing a teammate, ask: 'Is this kind AND true?'", "Find one struggling player this week and intentionally encourage them", "Journal: where did strength AND gentleness show up together today?"] },
-  H: { key:"H", label:"Humility", icon:"🙏", tagline:"Playing from identity, not for identity", color:"#ff8c00", bg:"#fff8f0", border:"#ff8c00",
-       scoreMeaning: "0=Very prideful • 1=Occasional humility • 2=Growing humility • 3=Consistently humble",
-       strong: ["Credits teammates and coaches for success", "Accepts coaching without defensiveness", "Secure enough to celebrate others"],
-       weak:   ["Takes credit, deflects blame", "Gets defensive when corrected", "Needs to be the star"],
-       develop: ["After your next win, publicly credit two specific teammates", "When corrected by a coach, respond: 'Thank you, I'll work on that'", "Ask yourself: 'Am I playing TO prove something or FROM knowing who I am?'"] },
-  Gr: { key:"Gr", label:"Gratitude", icon:"🙌", tagline:"Thankful in all circumstances", color:"#ffaa00", bg:"#fffdf0", border:"#ff8c00",
-       scoreMeaning: "0=Very entitled • 1=Occasional thanks • 2=Usually grateful • 3=Thankful in all circumstances",
-       strong: ["Thanks coaches, officials, and opponents", "Grateful for the opportunity to compete", "Positive attitude win or lose"],
-       weak:   ["Entitled attitude about playing time or roles", "Rarely thanks others", "Complains about conditions, calls, or teammates"],
-       develop: ["Start every practice with one thing you're grateful for about this team", "Write a one-line thank-you to a coach or teammate this week", "After a loss, find three genuine things to be thankful for before you leave"] },
-  J: { key:"J", label:"Joy", icon:"🎉", tagline:"Delight that outlasts the score", color:"#ff6600", bg:"#fff4f0", border:"#ff8c00",
-       scoreMeaning: "0=Joy is gone • 1=Rare joy • 2=Usually joyful • 3=Consistent delight",
-       strong: ["Genuine enjoyment of the game", "Joy that doesn't depend on the scoreboard", "Lifts the energy of those around them"],
-       weak:   ["Only happy when winning", "Drains team energy with negativity", "Has lost the love of the game"],
-       develop: ["Recall why you first fell in love with this sport — write it down", "Find one moment in each practice to just enjoy the game", "Remind yourself: the scoreboard is temporary, but who you're becoming is not"] }
+var DOMAINS = ['Command Presence','Tactical Knowledge','Accountability','Humility','Communication','Team Development','Character & Integrity','Vision & Purpose','Resilience & Growth'];
+var DICONS  = {'Command Presence':'👁','Tactical Knowledge':'🔥','Accountability':'⚖','Humility':'🙏','Communication':'💬','Team Development':'👥','Character & Integrity':'🛡','Vision & Purpose':'🧭','Resilience & Growth':'⚡'};
+
+// ══════════════════════════════════════════════════════════
+//  CONTENT
+// ══════════════════════════════════════════════════════════
+var QUOTES_SECULAR = [
+  {t:"Extreme Ownership. Leaders must own everything in their world. There is no one else to blame.",a:"Jocko Willink, Extreme Ownership"},
+  {t:"A leader is one who knows the way, goes the way, and shows the way.",a:"John C. Maxwell"},
+  {t:"Leadership is not about being in charge. It is about taking care of those in your charge.",a:"Simon Sinek"},
+  {t:"Vulnerability is not winning or losing; it's having the courage to show up and be seen when we have no control over the outcome.",a:"Brené Brown, Dare to Lead"},
+  {t:"Radical humility is not about diminishing yourself, but about valuing the contributions of others.",a:"Urs Koenig, Radical Humility"},
+  {t:"The fire service doesn't build character — it reveals it.",a:"Rick Lasky"},
+  {t:"There is no command presence without personal presence. You must be there — truly there.",a:"Anthony Kastros"},
+  {t:"Level 5 leaders channel their ego needs away from themselves and into the larger goal.",a:"Jim Collins, Good to Great"},
+  {t:"Start with why. People don't buy what you do; they buy why you do it.",a:"Simon Sinek"},
+  {t:"The building is trying to tell you something. Your job is to listen.",a:"Dave Dodson"},
+  {t:"Irreducible complexity exists in the human character. You cannot remove integrity from the leadership equation.",a:"Danny Cancino, Irreducible Complexity for Success"},
+  {t:"Decentralize command. Train your leaders so they can operate without you.",a:"Jocko Willink"},
+  {t:"The fire officer who studies only tactics will never develop the judgment to know when not to use them.",a:"John Norman"},
+  {t:"Not finance. Not strategy. Not technology. It is teamwork that remains the ultimate competitive advantage.",a:"Patrick Lencioni"},
+  {t:"Humility is not thinking less of yourself, it's thinking of yourself less.",a:"C.S. Lewis"},
+  {t:"People follow leaders who are consistent, not just competent.",a:"Craig Groeschel"},
+  {t:"You promote what you permit.",a:"Leadership Principle"},
+  {t:"I don't grease the squeaky wheel. I feed the hungry.",a:"DJ Stone"},
+  {t:"Be the spark today. Just the spark.",a:"BECOMING"},
+  {t:"You will have haters and that's okay. They're the minority.",a:"DJ Stone"},
+  {t:"The strength of the team is each individual member. The strength of each member is the team.",a:"Phil Jackson"},
+  {t:"You don't rise to the level of your expectations. You fall to the level of your training.",a:"Archilochus"},
+  {t:"A good leader takes a little more than his share of the blame, a little less than his share of the credit.",a:"Arnold Glasow"},
+  {t:"The most dangerous leadership myth is that leaders are born. Leaders are made.",a:"Warren Bennis"},
+  {t:"Tough on results, tender on people.",a:"Urs Koenig"},
+  {t:"The servant-leader is servant first.",a:"Robert Greenleaf"},
+  {t:"The growth and development of people is the highest calling of leadership.",a:"Harvey Firestone"},
+  {t:"Leadership is the capacity to translate vision into reality.",a:"Warren Bennis"},
+];
+var QUOTES_FAITH = [
+  {t:"Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.",a:"Joshua 1:9"},
+  {t:"Whoever wants to become great among you must be your servant.",a:"Mark 10:43"},
+  {t:"Leadership is stewardship. It's temporary, and you're accountable.",a:"Andy Stanley"},
+  {t:"My utmost for His highest. That is the only standard worth pursuing.",a:"Oswald Chambers"},
+  {t:"Integrity is doing the right thing, even when no one is watching.",a:"C.S. Lewis"},
+  {t:"Nehemiah didn't just rebuild a wall. He rebuilt a people.",a:"Andy Stanley"},
+  {t:"The greatest among you will be your servant.",a:"Matthew 23:11"},
+  {t:"Have I not commanded you? Be strong and courageous.",a:"Joshua 1:9"},
+];
+
+var SPARKS = [
+  {text:"Feed the hungry, not the squeaky wheel. Invest in those who are leaning in.", source:"DJ Stone principle"},
+  {text:"Before you lead your crew today, lead yourself. One decision at a time.", source:"BECOMING"},
+  {text:"Be the spark today. Just the spark. You don't have to be the whole fire.", source:"BECOMING"},
+  {text:"What you permit is what you promote. What are you permitting right now?", source:"Leadership Principle"},
+  {text:"The leader who develops people multiplies their impact beyond anything they could do alone.", source:"John Maxwell"},
+  {text:"Extreme ownership begins with looking in the mirror before looking out the window.", source:"Jocko Willink"},
+  {text:"Your crew is watching you far more than they're listening to you.", source:"Frank Viscuso"},
+  {text:"You cannot lead anyone further than you have gone yourself.", source:"Gene Mauch"},
+  {text:"Read the building before you go inside. Read the room before you speak.", source:"Dave Dodson / BECOMING"},
+  {text:"Humility and accountability are not weaknesses. They are the load-bearing walls of every great team.", source:"Urs Koenig"},
+];
+
+var LESSONS = {
+  fire:[
+    {id:'norman',icon:'🔥',title:"Fire Officer's Handbook of Tactics",author:"John Norman",domain:"Tactical Knowledge",
+     lessons:[
+      {id:'norman_1',title:"Size-Up: COAL WAS WEALTH",principle:"Every incident begins before you arrive. Size-up is continuous, not a checklist.",keyquote:"The fire officer who studies only tactics will never develop the judgment to know when not to use them.",application:"Run COAL WAS WEALTH mentally on every call — even mundane ones. Build the habit so it's automatic when it counts.",action:"Today, run a mental size-up on your station before your shift. What would you do if it were on fire right now?"},
+      {id:'norman_2',title:"Offensive vs. Defensive: The Decision That Defines You",principle:"The transition from offensive to defensive is the most consequential decision a fire officer makes.",keyquote:"Withdraw all interior crews before opening master streams. No exceptions.",application:"The decision framework: savable victims + structural integrity + adequate resources = offensive. Any one missing = reconsider.",action:"Discuss with your crew today: what are YOUR criteria for going defensive? Write them down before you need them."},
+      {id:'norman_3',title:"Hose Line Placement: First Line Is Everything",principle:"The first hose line protects occupants first, then attacks fire. Position determines outcome.",keyquote:"The first line must go between the fire and the lives in danger.",application:"On your next structure fire, state aloud where each line is going and why before crews advance.",action:"Review your SOG for hose line deployment with your crew this shift."},
+     ]},
+    {id:'brannigan',icon:'🏗',title:"Building Construction for the Fire Service",author:"Frank Brannigan",domain:"Tactical Knowledge",
+     lessons:[
+      {id:'bran_1',title:"The Building Is Your Enemy When It's on Fire",principle:"The building that shelters in life can kill in fire. Know your construction types before you need to.",keyquote:"The building is trying to tell you something. Your job is to listen.",application:"Type V wood frame and Type III ordinary construction are most deadly. Know them by sight in your district.",action:"Drive your district today. Identify 3 buildings and classify their construction type."},
+      {id:'bran_2',title:"Trusses: The Collapse Waiting to Happen",principle:"Lightweight trusses fail fast and without warning. Bowstring trusses are especially dangerous.",keyquote:"When trusses are involved in fire, the decision is already made for you: stay out.",application:"A truss under fire load can fail in minutes. Recognition must be immediate. Know your pre-plans.",action:"Pull the pre-plan for one large commercial building in your district and identify truss construction."},
+      {id:'bran_3',title:"Collapse Zones and Parapet Walls",principle:"Establish collapse zones equal to 1.5x the height of the wall. Parapet walls fall outward.",keyquote:"The wall that looks stable may already be moving.",application:"Point out collapse zones on your next working fire before anyone asks. Leadership is anticipating, not reacting.",action:"Brief your crew on parapet wall dangers before next shift. Five minutes. Do it."},
+     ]},
+    {id:'kastros',icon:'🎯',title:"Mastering the Fire Assessment Center",author:"Anthony Kastros",domain:"Command Presence",
+     lessons:[
+      {id:'kast_1',title:"Command Presence Starts Before You Open Your Mouth",principle:"How you enter a room, a scene, or a conversation communicates before you say a word.",keyquote:"There is no command presence without personal presence. You must be there — truly there.",application:"Officers who look uncertain produce uncertain crews. Practice deliberate posture, eye contact, and calm under pressure.",action:"Record yourself giving a 2-minute verbal scenario debrief. Watch it back. What does your presence communicate?"},
+      {id:'kast_2',title:"The Oral Board: Leadership Is Being Tested Before You're Promoted",principle:"The assessment center reveals your decision-making under pressure. Every shift is a rehearsal.",keyquote:"The best time to prepare for your promotion is three years before you need it.",application:"Officers who think clearly in chaos practice clarity in calm. Write out your decision process for common scenarios.",action:"Write a 5-sentence response to this: 'You arrive first on scene to a 2-story residential with fire showing from the second floor. What do you do?'"},
+      {id:'kast_3',title:"Feedback: The Gift Most Leaders Refuse",principle:"Assessment feedback is a development tool — most candidates treat it as a verdict.",keyquote:"What got you here will not get you there if 'here' is where you stop growing.",application:"Actively seek feedback from those above you, beside you, and below you. All three angles are essential.",action:"Ask one crew member today: 'What's one thing I could do better as a leader?' Then listen without defending."},
+     ]},
+    {id:'viscuso',icon:'📣',title:"Step Up and Lead",author:"Frank Viscuso",domain:"Team Development",
+     lessons:[
+      {id:'visc_1',title:"Character Before Competence",principle:"A technically skilled officer with poor character is a liability. Character is the foundation everything else is built on.",keyquote:"Your crew is watching you far more than they're listening to you.",application:"Model what you want. If you want accountability, be accountable first. If you want effort, give effort first.",action:"Identify one character trait you want your crew to develop. Ask yourself: am I demonstrating it daily?"},
+      {id:'visc_2',title:"Creating a Culture, Not Just a Crew",principle:"Great fire companies have cultures — shared values and expectations that outlast any individual.",keyquote:"Culture is what happens when the officer isn't watching.",application:"Culture is built in the small moments: how you debrief calls, how you handle conflict, what you celebrate.",action:"Write down 3 words you want your crew culture to be described as. Then ask: does our daily behavior reflect these?"},
+      {id:'visc_3',title:"The Difficult Conversation You Keep Avoiding",principle:"Leaders who avoid hard conversations are not being kind. They're being cowardly.",keyquote:"You owe it to your crew to tell them the truth — especially when it's hard.",application:"Have the conversation. Do it in private, with respect, and with a developmental frame — not punitive.",action:"Identify one conversation you've been putting off. Commit to having it this week."},
+     ]},
+    {id:'corley',icon:'9️⃣',title:"Corley's 9 Leadership Ls",author:"David Corley",domain:"Character & Integrity",
+     lessons:[
+      {id:'corl_1',title:"The 9 Ls: A Framework for Fire Service Leadership",principle:"Corley's framework: Leadership, Loyalty, Love, Learning, Legacy, Listening, Laughter, Labor, and Letting Go.",keyquote:"A leader who cannot let go of their ego cannot make room for their people to grow.",application:"Each 'L' is a dimension of character. A leader strong in all nine is rare — and worth following.",action:"Rate yourself 1-10 on each of the 9 Ls. Where is your lowest? That's your next development priority."},
+      {id:'corl_2',title:"Loyalty: Upward, Downward, and Sideways",principle:"Loyalty is not blind allegiance. It is honest commitment.",keyquote:"The officer who is only loyal upward will never earn loyalty downward.",application:"Defend your crew when it's costly. Challenge your crew when it's necessary. Both are loyalty.",action:"Think of one time you defended your crew to leadership. Think of one time you challenged your crew to be better. Both matter."},
+      {id:'corl_3',title:"Legacy: What Will They Say?",principle:"The measure of a leader is what happens after they leave.",keyquote:"Don't just build a great shift. Build great people who build great shifts after you're gone.",application:"Legacy thinking changes every decision. Ask: is this good for me right now, or good for the people I'm leaving behind?",action:"Write one paragraph about the legacy you want to leave as a fire officer. Be specific. Keep it."},
+     ]},
+    {id:'cancino',icon:'⚙',title:"Irreducible Complexity for Success",author:"Danny Cancino",domain:"Character & Integrity",
+     lessons:[
+      {id:'canc_1',title:"Some Things Cannot Be Simplified Away",principle:"There are elements of character, trust, and integrity that cannot be removed from any system that works.",keyquote:"Character is the one thing that cannot be simplified away.",application:"Quick fixes and shortcuts may work temporarily. Irreducible complexity demands the fundamentals.",action:"Identify one shortcut in your leadership or operations that you've been taking. What does the fundamental approach look like?"},
+      {id:'canc_2',title:"Personal Excellence Is Non-Negotiable",principle:"The standard of personal excellence is not what your organization requires — it's what you require of yourself.",keyquote:"Excellence is not a moment. It is a daily decision made before anyone is watching.",application:"What does your version of personal excellence look like on a slow day? That's your real standard.",action:"Define your personal excellence standard in writing. Three specifics. Post it somewhere you'll see it."},
+      {id:'canc_3',title:"Building Trust One Brick at a Time",principle:"Trust is not given. It is built through consistent, honest, accountable action over time.",keyquote:"The fastest way to lose trust is to act differently than you speak.",application:"Your crew doesn't trust your rank. They trust your consistency. Deliver the same person every day.",action:"Ask yourself: is who I am on my best day who I am on my worst day? Where is the gap?"},
+     ]},
+    {id:'lasky',icon:'🪖',title:"Nobody Gets Out Alive",author:"Rick Lasky",domain:"Resilience & Growth",
+     lessons:[
+      {id:'lask_1',title:"Pride, Passion, and Brotherhood",principle:"The best firefighters love the job, love the people, and refuse to let either down.",keyquote:"The fire service doesn't build character — it reveals it.",application:"Your passion is contagious. If you've lost it, get it back — or your crew will feel it before you admit it.",action:"Write down why you got into this job. Read it. Does your daily behavior reflect that person?"},
+      {id:'lask_2',title:"Survival Is a Mindset, Not Luck",principle:"Officers who create a survival mindset in their crew reduce risk before the call comes in.",keyquote:"Training saves lives before the fire starts.",application:"Physical fitness, mental preparation, and scenario-based training are not optional for serious officers.",action:"Plan one tabletop scenario for your crew this shift. No gear. Just thinking, talking, and deciding together."},
+      {id:'lask_3',title:"The Hungry Over the Squeaky",principle:"Invest in those who want to grow, not those who complain the loudest.",keyquote:"I don't grease the squeaky wheel. I feed the hungry. — DJ Stone",application:"Identify who on your crew is leaning in. Pour into them.",action:"Name one person on your crew right now who is hungry to grow. What are you doing to feed that?"},
+     ]},
+    {id:'salka',icon:'🚒',title:"First In Last Out",author:"John Salka",domain:"Communication",
+     lessons:[
+      {id:'salk_1',title:"Street-Smart Leadership",principle:"Leadership principles that sound good in a classroom must work at 3 AM.",keyquote:"Leadership on paper is easy. Leadership in smoke is something else entirely.",application:"Your leadership style must be pressure-tested. Does it hold when the call goes bad?",action:"Think of the hardest call you've led. What did your leadership look like? What would you do differently?"},
+      {id:'salk_2',title:"Communication Under Pressure",principle:"Officers who communicate clearly under pressure practiced communicating clearly when there was none.",keyquote:"The clearest command in the worst moment is the result of the most deliberate practice.",application:"Practice giving clear, direct, calm radio communications. Record yourself. Critique it.",action:"Conduct one communications drill this shift. Scenario: rapidly deteriorating interior conditions. What do you transmit?"},
+      {id:'salk_3',title:"Crew Culture Is Your Responsibility",principle:"The officer sets the tone. If the culture is poor, look at the officer.",keyquote:"You don't get the crew you want. You get the crew you build.",application:"Culture is the officer's product. Every shift, you are either building or allowing.",action:"Describe the crew culture in your station right now in 5 words. Are those the 5 words you'd choose?"},
+     ]},
+  ],
+  leadership:[
+    {id:'maxwell',icon:'📋',title:"The 21 Irrefutable Laws of Leadership",author:"John C. Maxwell",domain:"Vision & Purpose",
+     lessons:[
+      {id:'maxw_1',title:"The Law of the Lid",principle:"Leadership ability determines a person's level of effectiveness. You cannot lead beyond your own lid.",keyquote:"The single biggest way to impact an organization is to focus on leadership development.",application:"Raising your lid raises the ceiling for everyone under your leadership.",action:"Identify your current lid — the one skill that, if raised, would most impact your leadership effectiveness."},
+      {id:'maxw_2',title:"The Law of Influence",principle:"The true measure of leadership is influence — nothing more, nothing less. Title is not influence.",keyquote:"He who thinks he leads, but has no followers, is only taking a walk.",application:"Your crew follows your influence before they follow your rank. Build it before you need it.",action:"List 3 people who follow you because they want to — not because they have to. What do you offer them?"},
+      {id:'maxw_3',title:"The Law of Legacy",principle:"A leader's lasting value is measured by succession — what and who they leave behind.",keyquote:"Don't just build a great company. Build great people who build great companies after you're gone.",application:"Every person you develop is a force multiplier after you're gone.",action:"Who are you currently developing to be better than you? If no one, that's the answer."},
+     ]},
+    {id:'jocko',icon:'⚡',title:"Extreme Ownership",author:"Willink & Babin",domain:"Accountability",
+     lessons:[
+      {id:'jock_1',title:"Extreme Ownership: There Is No One Else",principle:"The leader is responsible for everything the team does or fails to do. No exceptions, no excuses.",keyquote:"Extreme Ownership. Leaders must own everything in their world. There is no one else to blame.",application:"When something goes wrong, the first question is not 'whose fault is this?' but 'what could I have done differently?'",action:"Think of a recent failure in your crew or station. Write down your ownership of it — before anyone else's."},
+      {id:'jock_2',title:"Decentralized Command",principle:"Leaders who develop their people to operate without them are stronger, not weaker.",keyquote:"Train your leaders so they can operate without you. That is the measure of real leadership.",application:"The officer who makes every decision creates a crew that can make none.",action:"Identify one decision you currently make that a crew member could make with the right training. Start that training."},
+      {id:'jock_3',title:"Cover and Move: The Team Is the Unit",principle:"No individual succeeds at the expense of the team.",keyquote:"The team that wins is the one that supports each other when it's costly to do so.",application:"Cover and move applies off the fireground too. Back up your people in hard moments.",action:"Who on your crew needs you to cover for them right now? What does that look like in practice?"},
+     ]},
+    {id:'koenig',icon:'🙏',title:"Radical Humility",author:"Urs Koenig",domain:"Humility",
+     lessons:[
+      {id:'koen_1',title:"The Five Shifts: From Heroic to Humble",principle:"Dig Deep, Tough on Results/Tender on People, Lead Like a Compass, Full Transparency, Champion a Fearless Culture.",keyquote:"Radical humility is not about diminishing yourself, but about valuing the contributions of others.",application:"THEN leadership: top-down, command and control. NOW leadership: transparent, relational, empowering.",action:"Rate yourself on each of the 5 shifts from 1-10. Which one needs the most work?"},
+      {id:'koen_2',title:"Tough on Results, Tender on People",principle:"High standards and deep care are not opposites. The best leaders hold both without apology.",keyquote:"Empathy is not the enemy of excellence. It is the catalyst for it.",application:"Being tender on people is not excusing poor performance. It is caring about the person behind the performance.",action:"Think of someone whose performance you need to address. How can you be tough on the result and tender on the person simultaneously?"},
+      {id:'koen_3',title:"Champion a Fearless Culture",principle:"The leader's job is to create an environment where people can speak up without fear.",keyquote:"Leaders who practice radical humility create environments where team members feel safe to voice their opinions.",application:"If your crew doesn't tell you bad news early, they don't trust the environment. That's on the leader.",action:"Ask your crew: 'Is there anything you've been hesitant to tell me?' Then prove they were right to tell you."},
+     ]},
+    {id:'brown',icon:'❤',title:"Dare to Lead",author:"Brené Brown",domain:"Communication",
+     lessons:[
+      {id:'brow_1',title:"Vulnerability Is Not Weakness",principle:"Vulnerability is the birthplace of innovation, creativity, and change.",keyquote:"Vulnerability is not winning or losing; it's having the courage to show up and be seen.",application:"Admit when you don't know. Acknowledge when you're wrong. Watch what it does to your crew's willingness to do the same.",action:"Share one genuine uncertainty or mistake with your crew this week. Notice what happens to trust."},
+      {id:'brow_2',title:"Rumbling with Vulnerability",principle:"Sit in the discomfort of hard conversations rather than avoiding them.",keyquote:"Clear is kind. Unclear is unkind.",application:"Vague feedback is not protection — it is abandonment. Say the specific, hard thing clearly and with care.",action:"Practice giving clear, specific, caring feedback with this frame: 'The behavior I observed was __ and the impact was __.'"},
+      {id:'brow_3',title:"Shame Resilience: The Leader's Inner Work",principle:"Leaders who cannot manage their own shame become defensive, reactive, and unsafe.",keyquote:"You cannot give people what you do not have. You cannot model courage you have not practiced.",application:"Know your triggers. Manage yourself before you manage others.",action:"Identify one situation where you became defensive recently. What was the underlying fear?"},
+      {id:'brow_4',title:"The Armor Leaders Wear",principle:"Brown identifies the armor leaders put on to avoid being seen: perfectionism, cynicism, a performed persona. All of it creates distance between the leader and the people they serve.",keyquote:"Armored leadership is built on the belief that vulnerability is weakness.",application:"The armored leader looks strong and produces armored teams. The officer who never admits uncertainty produces crews who hide mistakes.",action:"Identify one piece of armor you wear as a leader — a persona, a defense, a way of distancing. Name it. That's the first step to setting it down."},
+      {id:'brow_5',title:"Grounded Confidence: Strength Without the Shield",principle:"The alternative to armor is not softness — it is grounded confidence. I am enough, and I have enough, to do what this moment requires. That is a different kind of strength.",keyquote:"Authenticity is the daily practice of letting go of who we think we're supposed to be and embracing who we are.",application:"Grounded confidence doesn't need the armor. You know who you are. You show up the same whether the call is routine or critical.",action:"Complete this sentence in writing: 'As a leader, I am enough because ___.' Say it before your next difficult conversation, not after."},
+     ]},
+    {id:'lencioni',icon:'🤝',title:"The Five Dysfunctions of a Team",author:"Patrick Lencioni",domain:"Team Development",
+     lessons:[
+      {id:'lenc_1',title:"The Pyramid: Trust Is the Foundation",principle:"Absent trust → fear of conflict → lack of commitment → avoidance of accountability → inattention to results.",keyquote:"Not finance. Not strategy. Not technology. It is teamwork that remains the ultimate competitive advantage.",application:"You cannot address accountability without first addressing trust. Sequence matters.",action:"Assess your team using the five dysfunctions. Which level is the current failure point?"},
+      {id:'lenc_2',title:"Productive Conflict: The Missing Discipline",principle:"Teams that avoid conflict don't have less conflict — they have more, because it goes underground.",keyquote:"Teams that engage in productive conflict know that the only purpose is to find the best solution.",application:"Create a culture where disagreement is expected, handled with respect, and resolved with commitment.",action:"Facilitate one team disagreement this week rather than cutting it off. Let it be productive."},
+      {id:'lenc_3',title:"Collective Accountability Over Individual Comfort",principle:"Peer accountability is more powerful than leader-imposed accountability.",keyquote:"The best teams pressure each other before the leader has to.",application:"Your goal is a crew that holds itself to standards because they believe in each other.",action:"Name one standard in your crew that is currently being held by the crew themselves. Celebrate it."},
+     ]},
+    {id:'sinek_why',icon:'❓',title:"Start With Why",author:"Simon Sinek",domain:"Vision & Purpose",
+     lessons:[
+      {id:'sink_1',title:"The Golden Circle: Why Before How and What",principle:"Great leaders start with why — the belief that drives everything else.",keyquote:"People don't buy what you do; they buy why you do it.",application:"If your crew only knows what you do and not why you do it, they are completing tasks, not pursuing purpose.",action:"Articulate your WHY as a fire officer in one sentence. Then share it with your crew this week."},
+      {id:'sink_2',title:"Leaders Who Inspire vs. Leaders Who Manipulate",principle:"Manipulation produces compliance. Inspiration produces commitment.",keyquote:"Manipulation is not leadership. Leadership is inspiring others to do something because they want to.",application:"Ask yourself: am I getting buy-in through inspiration or through pressure?",action:"Identify one instance in the last month where you motivated through pressure. What would an inspiring approach have looked like?"},
+      {id:'sink_3',title:"The Tipping Point: Building a Movement",principle:"Leaders who start with why attract others who believe what they believe.",keyquote:"The goal is to do business with people who believe what you believe.",application:"Build a crew of believers, not a crew of compliers.",action:"Write one paragraph about what you believe about the fire service and why it matters. Share it."},
+     ]},
+    {id:'covey',icon:'🔄',title:"The 7 Habits",author:"Stephen Covey",domain:"Character & Integrity",
+     lessons:[
+      {id:'covy_1',title:"Begin with the End in Mind",principle:"All things are created twice — first in the mind, then in reality.",keyquote:"Management is doing things right. Leadership is doing the right things.",application:"Clarify what success looks like for your crew, your career, and your character before you act.",action:"Write your personal mission statement today. One paragraph. What do you want to be remembered for?"},
+      {id:'covy_2',title:"Seek First to Understand",principle:"Most people listen to respond, not to understand.",keyquote:"The biggest communication problem is we do not listen to understand. We listen to reply.",application:"In your next difficult conversation, commit to asking three questions before offering your perspective.",action:"Practice empathic listening in one conversation today. Repeat back what you heard before responding."},
+      {id:'covy_3',title:"Sharpen the Saw",principle:"Continuous renewal — physical, mental, emotional, spiritual. Leaders who don't renew become dull.",keyquote:"We must never become too busy sawing to take time to sharpen the saw.",application:"Rest, learning, fitness, and reflection are leadership requirements, not luxuries.",action:"Identify which of the four renewal areas you're neglecting most. Make one concrete commitment to it this week."},
+     ]},
+    {id:'collins',icon:'📈',title:"Good to Great",author:"Jim Collins",domain:"Humility",
+     lessons:[
+      {id:'coll_1',title:"Level 5 Leadership: Ego Out, Mission In",principle:"Level 5 leaders combine fierce professional will with deep personal humility.",keyquote:"Level 5 leaders channel their ego needs away from themselves and into the larger goal.",application:"The Level 5 leader is ambitious for the mission, not for themselves.",action:"Think of one decision you've made recently that was more about you than about the mission. What would a Level 5 decision have looked like?"},
+      {id:'coll_2',title:"The Hedgehog Concept",principle:"Focus on the intersection of passion, what you can be best at, and what drives results.",keyquote:"Good is the enemy of great.",application:"What is your hedgehog as a leader? Where passion, strength, and impact converge.",action:"Define your leadership hedgehog in one sentence."},
+      {id:'coll_3',title:"The Flywheel: Consistent Effort Compounds",principle:"There is no one defining moment. Greatness is consistent, disciplined effort.",keyquote:"There was no single defining action. It was cumulative.",application:"Your credibility, culture, and crew's growth are all flywheel effects. Keep pushing every shift.",action:"Identify the one consistent leadership behavior that, if maintained, would compound most powerfully over the next year."},
+     ]},
+    {id:'marquet',icon:'⚓',title:"Turn the Ship Around",author:"L. David Marquet",domain:"Team Development",
+     lessons:[
+      {id:'marq_1',title:"Leader-Leader, Not Leader-Follower",principle:"Replace the leader-follower model. Every person thinks and acts like a leader at their level.",keyquote:"The goal of a leader is not to create followers. It's to create more leaders.",application:"Every time you answer a question someone could answer themselves, you train dependence.",action:"Replace one answer you'd normally give with a question: 'What do YOU think we should do?'"},
+      {id:'marq_2',title:"Competence and Clarity First",principle:"You can't give people control they haven't earned through competence and clarity.",keyquote:"Control without competence is chaos.",application:"Before delegating, ask: does this person have the competence and the clarity to act?",action:"Identify one task you've delegated without sufficient training. Fix the training gap this week."},
+      {id:'marq_3',title:"Avoid the Programmed Response",principle:"Describe intent and ask your officers to figure it out. It builds thinking leaders.",keyquote:"Don't give orders. Give intent. Then develop people capable of fulfilling it.",application:"Describe what you need accomplished, not how to accomplish it.",action:"Give one assignment this week as intent only: 'I need this outcome by this time. How you get there is yours.'"},
+     ]},
+    {id:'clear',icon:'⚛',title:"Atomic Habits",author:"James Clear",domain:"Resilience & Growth",
+     lessons:[
+      {id:'clea_1',title:"Identity-Based Change",principle:"The most effective habit change starts with identity. Be the leader, then do the things.",keyquote:"Every action you take is a vote for the type of person you wish to become.",application:"Change your identity before you change your behavior. The behavior follows naturally.",action:"Write: 'I am a leader who ___.' Fill in the blank with who you are becoming, not who you have been."},
+      {id:'clea_2',title:"Systems Over Goals",principle:"Goals are good for direction. Systems produce results.",keyquote:"You do not rise to the level of your goals. You fall to the level of your systems.",application:"What systems do you have for developing your crew, reviewing your performance, and growing your knowledge?",action:"Design one simple system for daily leadership development. 10 minutes. Specific. Sustainable."},
+      {id:'clea_3',title:"The 1% Rule: Small Wins Compound",principle:"1% better every day = 37x better in a year.",keyquote:"Success is the product of daily habits, not once-in-a-lifetime transformations.",application:"What is your 1% today? Read one page. Have one good conversation. Make one decision from principle.",action:"Identify three 1% improvements in your leadership you can make this week. Write them. Do them."},
+     ]},
+    {id:'meyer',icon:'🏟',title:"Above the Line",author:"Urban Meyer",domain:"Accountability",
+     lessons:[
+      {id:'meye_1',title:"Above the Line: The Gap That Defines You",principle:"Between every stimulus and response there is a space. In that space is your power to choose. Above the line: responsible, accountable, coachable. Below the line: blame, excuses, denial — BED.",keyquote:"Above the line or below the line. There is no middle ground.",application:"Below the line behaviors are contagious. One person operating in blame and excuses can pull an entire unit down faster than a leader can build it up.",action:"Catch yourself going below the line today. You don't have to announce it — just notice it, name it internally, and get above it."},
+      {id:'meye_2',title:"The Championship Standard",principle:"Elite culture is defined by non-negotiable standards, held consistently, by everyone, regardless of who's watching or what the scoreboard says. The standard is the standard.",keyquote:"The standard is the standard. It doesn't change based on circumstance.",application:"The moment you allow a standard to slide, you have redefined the standard. Not officially — but actually. And your crew notices before you do.",action:"Identify one standard in your crew or in yourself that has been sliding. No reasons. No context. Just restore it this shift."},
+      {id:'meye_3',title:"Unit Cohesion: The Power of Us",principle:"Meyer's research: the highest performing teams have the deepest sense of shared identity and mutual accountability. The 'us' is not accidental — it is built deliberately.",keyquote:"When you feel connected to something bigger than yourself, you perform beyond yourself.",application:"Peer accountability is only possible when crew members see themselves as part of something shared. The officer's job is to build that shared identity.",action:"Do one thing today that reinforces the shared identity of your crew — a tradition, a moment, a standard held together. Build the us."},
+     ]},
+    {id:'wooden',icon:'🏀',title:"Wooden on Leadership / Pyramid of Success",author:"John Wooden",domain:"Character & Integrity",
+     lessons:[
+      {id:'wood_1',title:"The Pyramid: Character Is the Cornerstone",principle:"Wooden's Pyramid of Success: Industriousness and Enthusiasm are the cornerstones. Everything — loyalty, cooperation, self-control, poise, competitive greatness — builds from them. He never talked about winning. The scoreboard took care of itself.",keyquote:"The most important thing in the world is character.",application:"Wooden coached ten national championships without ever mentioning winning to his players. He focused entirely on the process of becoming. The results followed.",action:"Pick one block of the Pyramid you're weakest in right now. Work it deliberately this week — not as motivation, as identity."},
+      {id:'wood_2',title:"Be Quick But Don't Hurry",principle:"One of Wooden's most powerful distinctions — urgency without panic. Speed in execution comes from preparation, not from rushing. Hurrying is a symptom of unpreparedness.",keyquote:"Be quick but don't hurry.",application:"The officer who hurries is reacting. The officer who is quick has already thought it through. The difference is preparation — and the calm it produces under pressure.",action:"Before your next high-stakes decision, pause one deliberate second. That gap between quick and hurried is where judgment lives."},
+      {id:'wood_3',title:"Success Is Peace of Mind",principle:"Wooden's definition of success has nothing to do with scorecards: it is the peace of mind attained through self-satisfaction in knowing you made the effort to become the best of which you are capable.",keyquote:"Success is peace of mind, which is a direct result of self-satisfaction in knowing you made the effort to become the best of which you are capable.",application:"By this definition, every shift is an opportunity for success — regardless of call volume, regardless of what went wrong, regardless of politics. Did you give your best?",action:"At the end of your next shift, ask yourself one question: did I make the effort to be my best today? That's the only scoreboard Wooden cared about."},
+     ]},
+    {id:'saban',icon:'🏆',title:"The Process",author:"Nick Saban",domain:"Resilience & Growth",
+     lessons:[
+      {id:'saba_1',title:"The Process: One Play at a Time",principle:"Saban's core philosophy: don't play the scoreboard. Focus entirely on executing the next task to the best of your ability. The results are the compound interest of process mastered.",keyquote:"Don't think about winning the championship. Think about what you need to do in this drill, on this play, in this moment. That's The Process.",application:"The officer who chases outcomes loses process. The officer who masters process controls outcomes. Anxiety lives in the future. Excellence lives in the present.",action:"On your next call, stay entirely present on the task in front of you. Not the outcome, not the outcome before this one. Just the play."},
+      {id:'saba_2',title:"The Elite Standard Is Non-Negotiable",principle:"Saban builds culture where the standard is clear, constant, and held by everyone — not as an aspiration, but as identity. We are who we are. Every time.",keyquote:"We're going to be who we are. And we're going to do it every single time.",application:"Consistency is the elite standard. Your crew performs to the standard they have practiced — not the one you described in a meeting. The standard must be lived daily.",action:"Define your elite standard in one sentence. Then ask: does what we actually do on a slow shift match it? That gap is your development priority."},
+      {id:'saba_3',title:"Preparation as Competitive Advantage",principle:"What separates elite performers is not talent — it is the commitment to preparation that most people are unwilling to make. The will to prepare is more important than the will to perform.",keyquote:"The will to prepare to win is more important than the will to win.",application:"The fire officer who trains harder than the call demands will be calmer in the call than any officer who didn't. Preparation is the only form of confidence that holds under real pressure.",action:"Add one preparation habit this week that exceeds your minimum requirement. Tabletop, fitness, study, scenario. Make it your standard, not your exception."},
+     ]},
+    {id:'greenleaf',icon:'🌿',title:"Servant Leadership",author:"Robert Greenleaf / Simon Sinek",domain:"Team Development",
+     lessons:[
+      {id:'gree_1',title:"The Servant Leader: Who Is First?",principle:"Greenleaf's foundational test: do those served grow as persons? Do they become healthier, wiser, freer, more capable, more likely to serve others? The servant leader leads because they serve — not the other way around.",keyquote:"The servant-leader is servant first. It begins with the natural feeling that one wants to serve, to serve first.",application:"Servant leadership is not a style or a program. It is a posture — chosen before the shift starts, before anyone is watching, before there's anything to gain from it.",action:"Before your shift today, ask one question: how will I serve the people in my care? Identify one specific answer. Then do it."},
+      {id:'gree_2',title:"Leaders Eat Last",principle:"Sinek documented what the Marine Corps knew: the best officers eat after their people are fed. This is not metaphor — it is the physical expression of a leadership value that changes everything downstream.",keyquote:"The true price of leadership is the willingness to place the needs of others above your own.",application:"In every resource decision, every recognition, every hard conversation — the servant leader asks: what does my crew need here? Not: what do I need here?",action:"Identify one thing you've been holding onto — credit, information, a resource, recognition — and give it to your crew this week. No announcement. Just do it."},
+      {id:'gree_3',title:"The Culture Replicates the Leader",principle:"Leaders who serve first don't just build stronger crews — they build crews that serve each other. The culture replicates from the top. What you model becomes the norm.",keyquote:"Leadership is not about being in charge. It is about taking care of those in your charge.",application:"If your crew does not serve each other without being told, look at whether the officer serves without being told. Culture flows downhill from the leader — always.",action:"Look for one moment today where you can serve before you're asked, without drawing attention to it. That single act is the seed of a servant culture."},
+     ]},
+  ],
+  faith:[
+    {id:'groeschel',icon:'✝',title:"Leadership Is",author:"Craig Groeschel",domain:"Character & Integrity",
+     lessons:[
+      {id:'groe_1',title:"People Follow Consistency, Not Perfection",principle:"Leaders don't have to be perfect, but they must be consistent. Consistency builds trust.",keyquote:"People follow leaders who are consistent, not just competent.",application:"Show up the same person every day.",action:"Identify one area where you are inconsistent as a leader. What does a consistent version look like?"},
+      {id:'groe_2',title:"Leadership Is Stewardship",principle:"The people under your leadership are entrusted to you. How are you stewarding them?",keyquote:"Leadership is stewardship. It's temporary, and you're accountable.",application:"Stewardship thinking changes everything: what am I responsible for?",action:"Write a stewardship statement: 'I am entrusted with __ people and I am accountable for ___.'"},
+      {id:'groe_3',title:"Character Before Competence, Always",principle:"Competence can be trained. Character must be cultivated.",keyquote:"Who you are in private determines who you become in public.",application:"Your private habits and disciplines are the raw material of your public leadership.",action:"Evaluate one private discipline and recommit to it this week."},
+     ]},
+    {id:'stanley',icon:'🕊',title:"Visioneering & Deep and Wide",author:"Andy Stanley",domain:"Vision & Purpose",
+     lessons:[
+      {id:'stan_1',title:"Vision: A Mental Picture of a Preferred Future",principle:"Vision is a clear mental picture of a preferred future, accompanied by strong inner conviction.",keyquote:"Leadership is stewardship. It's temporary, and you're accountable.",application:"A vision without urgency is just a wish. A vision with conviction becomes a movement.",action:"Write your leadership vision in one sentence. Is it specific enough to know when you've arrived?"},
+      {id:'stan_2',title:"Nehemiah: Leading Through Opposition",principle:"Nehemiah rebuilt a wall in 52 days while facing opposition. Clear vision, prayer, decisive action.",keyquote:"Nehemiah didn't just rebuild a wall. He rebuilt a people.",application:"Haters and opposition are not signs you're doing it wrong. Sometimes they're signs you're doing it right.",action:"Identify one source of opposition you're currently facing. What does a Nehemiah response look like?"},
+      {id:'stan_3',title:"Next Generation Leadership",principle:"The greatest thing a leader can do is develop the next generation of leaders.",keyquote:"Leaders who refuse to develop others are hoarding what was entrusted to them.",application:"Who is the next version of you that you are currently investing in?",action:"Name one emerging leader you will pour into this month. Make the call."},
+     ]},
+    {id:'chambers',icon:'📖',title:"My Utmost for His Highest",author:"Oswald Chambers",domain:"Humility",
+     lessons:[
+      {id:'cham_1',title:"Surrender Before Service",principle:"The greatest danger to a leader is service without surrender — doing the work without the inner life.",keyquote:"My utmost for His highest. That is the only standard worth pursuing.",application:"The leader who serves from an empty well eventually breaks. Tend the inner life first.",action:"What does your inner life look like right now? When did you last fill the well?"},
+      {id:'cham_2',title:"Character Is Forged in the Unseen",principle:"God builds character in the unseen moments — the quiet disciplines, the private choices.",keyquote:"The private decisions you make in the presence of God are the architecture of your public life.",application:"What you do when no one is watching is who you actually are.",action:"Identify one private discipline that, if maintained, would most strengthen your public character. Recommit."},
+      {id:'cham_3',title:"Abandon to God's Call",principle:"Full abandon — giving yourself entirely to what you're called to do and be.",keyquote:"Abandon means to give without reservation. That is the posture of the greatest servants in history.",application:"Partial commitment produces partial results and full-time regret. Go all in.",action:"Is there an area of your leadership or faith where you've been holding back? What would full abandon look like?"},
+     ]},
+    {id:'lewis',icon:'🦁',title:"Mere Christianity",author:"C.S. Lewis",domain:"Character & Integrity",
+     lessons:[
+      {id:'lewi_1',title:"Virtue: The Architecture of Character",principle:"Virtue is not a feeling — it is a habit. You become brave by doing brave things.",keyquote:"Courage is not simply one of the virtues, but the form of every virtue at its testing point.",application:"Leadership courage is not absence of fear. It is action despite fear, repeated until it becomes who you are.",action:"Where in your leadership are you waiting to feel brave enough to act? Do the brave thing today anyway."},
+      {id:'lewi_2',title:"Pride: The Great Sin of Leadership",principle:"Pride is the root of all the others. It prevents leaders from seeing clearly.",keyquote:"Humility is not thinking less of yourself, it's thinking of yourself less.",application:"The proudest leaders are often the least effective.",action:"Identify one area where pride is distorting your leadership perception. What would humility allow you to see?"},
+      {id:'lewi_3',title:"Moral Law: The Universal Standard",principle:"There is a universal moral law that everyone knows instinctively.",keyquote:"A man does not call a line crooked unless he has some idea of a straight line.",application:"The leader who operates from principle — not policy — earns a different kind of respect.",action:"Identify one leadership decision you've made from policy compliance rather than principle. What does the principled version look like?"},
+     ]},
+  ]
 };
 
-const SCORE_LABELS = ["Missing", "Emerging", "Developing", "Strong"];
+var PLAYS = [
+  {title:"The 2-Minute Debrief",tag:"CREW TOOL",body:"After every significant call, before the apparatus is back in service, ask three questions: What did we do well? What could we do better? What will we change? Two minutes. Standing around the rig. Non-negotiable."},
+  {title:"The Investment Conversation",tag:"ONE-ON-ONE",body:"Schedule 15 minutes with one crew member per week. Not to address problems. Just to ask: 'What are you working on? What do you need? How can I help you grow?'"},
+  {title:"Feed the Hungry",tag:"CULTURE",body:"Identify the 1-2 people on your crew who are genuinely leaning in and hungry to grow. Pour disproportionately into them. Don't grease the squeaky wheel — feed the hungry. (DJ Stone)"},
+  {title:"The Challenge Assignment",tag:"DEVELOPMENT",body:"Assign a crew member to teach the crew something — a medical protocol, a technique, a history lesson about a LODD. The act of teaching forces mastery."},
+  {title:"The Public Acknowledgment",tag:"MOTIVATION",body:"Catch someone doing something right and say it out loud. Be specific. Not 'good job' — but 'I watched you initiate CPR without being told, and that person is alive because you didn't hesitate.'"},
+  {title:"The Hard Conversation Framework",tag:"ACCOUNTABILITY",body:"When addressing poor performance: (1) Do it in private. (2) Name the specific behavior. (3) Name the impact. (4) Ask what happened. (5) Agree on what changes. (6) Follow up."},
+  {title:"The Vision Conversation",tag:"CULTURE",body:"Tell your crew where you're taking them. Not vague — specific. 'In one year, I want this crew to be known in this department for ___.' Give them a target."},
+  {title:"The Spark Play",tag:"INSPIRATION",body:"Start every shift briefing with one quote, one principle, one story, or one question that makes someone think. 60 seconds. Be the spark. Just the spark."},
+  {title:"The Promotion Standard",tag:"DEVELOPMENT",body:"Identify one person on your crew who has potential for promotion. Tell them directly: 'I think you should promote. I'm going to help you get ready.' Then do it."},
+  {title:"The Culture Audit",tag:"CULTURE",body:"Periodically ask yourself: if I left this station today, what culture would I leave behind? Is it the culture that saves lives? Your answer tells you where to put your energy next shift."},
+];
 
-// ─── HELPERS ──────────────────────────────────────────────────────────────────
-function getCombo(scores) {
-  const strong = Object.values(scores).filter(v => v === 3).length;
-  const developing = Object.values(scores).filter(v => v >= 2).length;
-  const avg = (Object.values(scores).reduce((a,b) => a + b, 0) / 7).toFixed(1);
+var ONEONONEPLAYS = [
+  {title:"The Strengths Mirror",tag:"GROWTH",body:"Tell your crew member the three things you see them doing exceptionally well. Be specific. Then ask: 'Do you see these in yourself?' Most people don't."},
+  {title:"The Growth Edge Conversation",tag:"DEVELOPMENT",body:"Ask: 'If you could be stronger in one area as a firefighter/officer, what would it be?' Then help them build a plan."},
+  {title:"The 'What Do You Need?' Question",tag:"INVESTMENT",body:"Simply ask: 'What do you need from me that you're not getting?' Then listen without defending."},
+  {title:"The Legacy Question",tag:"VISION",body:"Ask your crew member: 'What do you want to be known for in this department when you retire?' Most have never been asked. The question itself is motivating."},
+];
 
-  if (strong >= 5) return { label: "Kingdom Competitor", icon: "🏆", desc: `Avg ${avg}/3`, color: C.orange, progress: 95 };
-  if (developing >= 6) return { label: "Strong Disciple", icon: "🌟", desc: `Avg ${avg}/3`, color: C.green, progress: 85 };
-  return { label: "Developing Disciple", icon: "🌱", desc: `Avg ${avg}/3`, color: "#fd7e14", progress: Math.round(developing / 7 * 100) };
+var FAITH_PLAYS = [
+  {title:"The Servant Leader Standard",tag:"FAITH",body:"Before your next shift, ask: what is one way I can serve someone on my crew today without recognition or reward? Then do it. Just do it."},
+  {title:"The Nehemiah Principle",tag:"FAITH",body:"Nehemiah faced ridicule and threats while rebuilding. He kept working. He didn't respond to every hater. He prayed, planned, and kept moving. Keep building."},
+  {title:"The Daily Surrender",tag:"FAITH",body:"Before your shift, take 5 minutes to surrender the day — the difficult situation, the frustrating policy, the call you're dreading. Lead from a surrendered posture."},
+  {title:"Integrity When No One Is Watching",tag:"FAITH",body:"Who you are in private is who you become in public. The faith-based leader holds themselves to a standard that has nothing to do with who's watching."},
+];
+
+var CHALLENGES = [
+  {title:"Own the Outcome",body:"Before your shift ends, identify one thing that went wrong and own it completely. No deflection, no blame.",source:"Extreme Ownership",author:"Jocko Willink",domain:"Accountability",quote:"Extreme Ownership. Leaders must own everything in their world. There is no one else to blame.",application:"On the fireground and off, leaders who blame their crew, their tools, or circumstances have already lost. Own it. Fix it. Move."},
+  {title:"Lead Like a Compass",body:"Today, identify one person on your crew and deliberately point them toward something they're good at. Call it out. Let them lead in that area.",source:"Radical Humility",author:"Urs Koenig",domain:"Team Development",quote:"Lead like a compass — not a control tower.",application:"The compass leader gives direction without micromanaging the route."},
+  {title:"The Law of the Lid",body:"Assess your own lid honestly. Write down the one leadership skill that, if improved, would raise the ceiling for everyone around you.",source:"The 21 Irrefutable Laws",author:"John C. Maxwell",domain:"Vision & Purpose",quote:"A leader's potential is determined by those closest to him.",application:"Your effectiveness as an officer is capped by your own development."},
+  {title:"Read the Building First",body:"Today, before entering any structure — or any meeting — take 60 seconds to observe. What does it tell you?",source:"Art of Reading Buildings",author:"Dave Dodson",domain:"Tactical Knowledge",quote:"The building is trying to tell you something. Your job is to listen.",application:"Most tactical failures begin outside the building. Most leadership failures begin before you open your mouth."},
+  {title:"Name One Dysfunction",body:"Identify one of Lencioni's five dysfunctions present in your crew right now.",source:"The Five Dysfunctions",author:"Patrick Lencioni",domain:"Team Development",quote:"Not finance. Not strategy. Not technology. It is teamwork that remains the ultimate competitive advantage.",application:"You cannot fix what you won't name. Naming the dysfunction is the first act of courageous leadership."},
+  {title:"Dare to Be Seen",body:"Share something today that cost you something — a mistake, a doubt, a moment of uncertainty.",source:"Dare to Lead",author:"Brené Brown",domain:"Communication",quote:"Vulnerability is not weakness. It is our greatest measure of courage.",application:"Crews that see their officer be human trust more deeply and perform better under pressure."},
+  {title:"Dig Deep",body:"Write down one blind spot you've been told about — or suspect you have — and sit with it today without defending it.",source:"Radical Humility",author:"Urs Koenig",domain:"Humility",quote:"Humility is not about thinking less of yourself. It is about thinking of yourself less.",application:"The leader who cannot see their own edges will always operate at the limits of them."},
+  {title:"Feed the Hungry",body:"Identify the one person on your crew who is most hungry to grow right now. Do one specific thing to pour into them today.",source:"DJ Stone / Rick Lasky",author:"DJ Stone",domain:"Team Development",quote:"I don't grease the squeaky wheel. I feed the hungry.",application:"Invest disproportionately in those who are leaning in."},
+  {title:"The Character Test",body:"Ask yourself: if my crew could hear every conversation I have about them when they're not in the room — would I be proud of what they'd hear?",source:"Irreducible Complexity",author:"Danny Cancino",domain:"Character & Integrity",quote:"Character is the one thing that cannot be simplified away.",application:"Integrity is irreducible from the leadership equation."},
+  {title:"Be the Spark",body:"Start today's shift briefing with one idea, quote, principle, or question that makes someone think. 60 seconds.",source:"BECOMING",author:"",domain:"Vision & Purpose",quote:"Be the spark today. Just the spark.",application:"The leader who ignites thought before the day starts creates a crew that thinks on the fireground."},
+  {title:"You Promote What You Permit",body:"Identify one behavior in your crew you've been tolerating rather than addressing. Decide today: are you permitting it or correcting it?",source:"Leadership Principle",author:"",domain:"Accountability",quote:"You promote what you permit.",application:"The standard is set not by what you say but by what you allow."},
+  {title:"Serve Before You Lead",body:"Do one thing today that serves someone on your crew with no recognition expected or received. Don't tell anyone.",source:"Leaders Eat Last",author:"Simon Sinek",domain:"Team Development",quote:"Leadership is not about being in charge. It's about taking care of those in your charge.",application:"The officer who feeds the crew before themselves is the one the crew will run through walls for."},
+  {title:"Systems Over Goals",body:"Identify one leadership goal you have that has no system behind it. Design the simplest possible daily system to make progress on it.",source:"Atomic Habits",author:"James Clear",domain:"Resilience & Growth",quote:"You do not rise to the level of your goals. You fall to the level of your systems.",application:"Discipline is not willpower. It is structure. Build the structure first."},
+  {title:"Legacy Thinking",body:"Before you make any major decision today, run it through this filter: will this matter in 10 years?",source:"The 21 Irrefutable Laws",author:"John Maxwell",domain:"Vision & Purpose",quote:"The true measure of leadership is succession.",application:"Legacy thinking elevates every decision."},
+  {title:"The Hater Test",body:"Think of someone who opposes you or your leadership. Ask yourself honestly: are they wrong about something real, or are they wrong because you're doing something right?",source:"DJ Stone",author:"DJ Stone",domain:"Resilience & Growth",quote:"You will have haters and that's okay. They're the minority.",application:"Every leader worth following has faced opposition. The question is whether you're letting them steer you."},
+  {title:"Above or Below the Line",body:"At three points today, stop and ask: am I operating above the line — responsible, accountable, coachable — or below it? Blame, excuses, denial. Name it honestly.",source:"Above the Line",author:"Urban Meyer",domain:"Accountability",quote:"Above the line or below the line. There is no middle ground.",application:"Below the line behavior is contagious. Above the line behavior is equally contagious. You set the tone with every choice, not every speech."},
+  {title:"The Process Play",body:"For one entire shift, refuse to evaluate any outcome until it's over. Focus only on executing the next task in front of you with full attention and precision.",source:"The Process",author:"Nick Saban",domain:"Resilience & Growth",quote:"Think about what you need to do in this drill, on this play, in this moment. That's The Process.",application:"Excellence is not a result. It is a discipline of presence. The score takes care of itself when the process is mastered."},
+  {title:"Wooden's Mirror",body:"At end of shift: did you make the effort to be your best today? Not the best result — the best effort. Answer honestly, without justification.",source:"Pyramid of Success",author:"John Wooden",domain:"Character & Integrity",quote:"Success is peace of mind, which is a direct result of self-satisfaction in knowing you made the effort to become the best of which you are capable.",application:"Wooden's definition of success is one you can achieve every single shift, regardless of what happens on the calls. The effort is fully within your control."},
+  {title:"Serve Before You're Asked",body:"Do one specific act of service for someone on your crew today before they need to ask — and without telling anyone you did it.",source:"Servant Leadership",author:"Robert Greenleaf",domain:"Team Development",quote:"The servant-leader is servant first.",application:"Servant leadership is not a program. It is a posture. The crew that sees their officer serve without recognition will build a culture where everyone serves without recognition."},
+];
+
+// ══════════════════════════════════════════════════════════
+//  PERSISTENCE
+// ══════════════════════════════════════════════════════════
+function save(){ try{localStorage.setItem('becoming_v2',JSON.stringify(S));}catch(e){} }
+function load(){
+  try{
+    var r=localStorage.getItem('becoming_v2');
+    if(r){ var p=JSON.parse(r); Object.assign(S,p); }
+    DOMAINS.forEach(function(d){ if(S.domains[d]===undefined) S.domains[d]=0; });
+    if(!S.expectations) S.expectations=[];
+    if(!S.crewNotes) S.crewNotes=[];
+    if(!S.expectVersions) S.expectVersions=[];
+    if(!S.mission) S.mission='';
+    if(!S.vision) S.vision='';
+    if(!S.commitment) S.commitment={text:'',startDate:'',log:{}};
+    if(!S.commitment.log) S.commitment.log={};
+  }catch(e){}
 }
 
-function calculateTeamProgress(athletes) {
-  if (athletes.length === 0) return { avgScore: "0.0", strongPercent: 0, totalAthletes: 0 };
-  let totalScore = 0, totalStrong = 0;
-  const totalVirtues = athletes.length * 7;
+// ══════════════════════════════════════════════════════════
+//  WELCOME
+// ══════════════════════════════════════════════════════════
+var wFaith=false;
+function toggleWelcomeFaith(){
+  wFaith=!wFaith;
+  document.getElementById('welcome-faith-toggle').classList.toggle('on',wFaith);
+}
+function completeWelcome(){
+  var n=document.getElementById('welcome-name').value.trim();
+  if(!n){document.getElementById('welcome-name').focus();return;}
+  S.userName=n; S.faithOn=wFaith; S.streak=0;
+  S.badges=['Journey Started'];
+  save();
+  document.getElementById('welcome').style.display='none';
+  document.getElementById('app').style.display='flex';
+  initApp();
+}
 
-  athletes.forEach(a => {
-    const scores = Object.values(a.scores || {});
-    totalScore += scores.reduce((a,b) => a + b, 0);
-    totalStrong += scores.filter(v => v === 3).length;
+// ══════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════
+function initApp(){
+  renderDash(); renderLearn(); renderChallenge();
+  renderPlaybook(); renderExpect();
+  renderGrowth(); renderJournal(); renderSettings();
+  renderCommitment();
+  updateFaithUI();
+}
+
+// ══════════════════════════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════════════════════════
+function switchTab(name){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.sidebar-btn').forEach(function(b){b.classList.remove('active');});
+  var pg=document.getElementById('page-'+name);
+  var tb=document.getElementById('tab-'+name);
+  var sb=document.getElementById('stab-'+name);
+  if(pg){pg.classList.add('active');document.getElementById('content').scrollTop=0;}
+  if(tb) tb.classList.add('active');
+  if(sb) sb.classList.add('active');
+  if(name==='coach' && coachEnabled){
+    setTimeout(function(){
+      var c=document.getElementById('content');
+      if(c) c.scrollTop=c.scrollHeight;
+    },80);
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════════════════════
+function renderDash(){
+  var now=new Date();
+  var hr=now.getHours();
+  var g=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+  document.getElementById('greeting-name').textContent=g+', '+S.userName+'.';
+  document.getElementById('greeting-date').textContent=now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('streak-display').textContent=S.streak+(S.streak===1?' day':' days');
+  var ssd=document.getElementById('sidebar-streak-display');
+  if(ssd) ssd.textContent=S.streak+(S.streak===1?' day':' days');
+
+  var pool=QUOTES_SECULAR.slice();
+  if(S.faithOn) pool=pool.concat(QUOTES_FAITH);
+  var q=pool[now.getDate()%pool.length];
+  document.getElementById('dash-quote-text').textContent=q.t;
+  document.getElementById('dash-quote-attr').textContent='— '+q.a;
+
+  var sp=SPARKS[now.getDate()%SPARKS.length];
+  document.getElementById('spark-text').textContent=sp.text;
+  document.getElementById('spark-source').textContent=sp.source;
+
+  var nd=document.getElementById('faith-nudge');
+  if(nd) nd.style.display=(!S.faithOn && now.getDay()===3)?'block':'none';
+
+  var br=document.getElementById('badge-row');
+  if(br) renderDashBadges();
+}
+
+// ══════════════════════════════════════════════════════════
+//  LEARN
+// ══════════════════════════════════════════════════════════
+function renderLearn(){
+  renderTrack('learn-fire', LESSONS.fire);
+  renderTrack('learn-leadership', LESSONS.leadership);
+  var faithSec=document.getElementById('faith-track-section');
+  var faithNudge=document.getElementById('faith-learn-nudge');
+  if(S.faithOn){
+    faithSec.style.display='block';
+    faithNudge.style.display='none';
+    renderTrack('learn-faith', LESSONS.faith);
+  } else {
+    faithSec.style.display='none';
+    faithNudge.style.display='block';
+    document.getElementById('learn-faith').innerHTML='';
+  }
+}
+
+function renderTrack(cid, sources){
+  var el=document.getElementById(cid);
+  if(!el) return;
+  el.innerHTML='';
+  sources.forEach(function(src){
+    var done=src.lessons.filter(function(l){return S.completedLessons.indexOf(l.id)>-1;}).length;
+    var pct=Math.round((done/src.lessons.length)*100);
+    var html='<div class="lesson-card">';
+    html+='<div class="lesson-card-header" onclick="toggleLesson(\'lbody_'+src.id+'\')">';
+    html+='<div class="lesson-icon">'+src.icon+'</div>';
+    html+='<div style="flex:1;min-width:0;">';
+    html+='<div class="card-title" style="font-size:14px;margin-bottom:2px;">'+src.title+'</div>';
+    html+='<div class="lesson-meta">'+src.author+' · '+src.domain+'</div>';
+    html+='<div style="margin-top:8px;background:var(--parchment-mid);border-radius:3px;height:4px;overflow:hidden;">';
+    html+='<div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));transition:width 0.4s;"></div></div>';
+    html+='</div>';
+    html+='<div style="font-size:11px;color:var(--ink-faint);white-space:nowrap;padding-left:8px;padding-top:2px;">'+done+'/'+src.lessons.length+'</div>';
+    html+='</div>';
+    html+='<div class="lesson-body" id="lbody_'+src.id+'">';
+    src.lessons.forEach(function(ls){
+      var isDone=S.completedLessons.indexOf(ls.id)>-1;
+      html+='<div style="border-top:1px solid var(--parchment-mid);padding:14px 0;">';
+      html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">';
+      html+='<div style="font-family:\'Playfair Display\',serif;font-size:14px;color:var(--ink);flex:1;">'+ls.title+'</div>';
+      if(isDone) html+='<div style="color:var(--success);font-size:12px;margin-left:8px;white-space:nowrap;">✓ Done</div>';
+      html+='</div>';
+      html+='<div class="lesson-principle"><div class="lesson-principle-label">PRINCIPLE</div><div class="lesson-principle-text">'+ls.principle+'</div></div>';
+      html+='<div class="lesson-field"><div class="lesson-field-label">KEY QUOTE</div><div class="lesson-field-text" style="font-style:italic;">"'+ls.keyquote+'"</div></div>';
+      html+='<div class="lesson-field"><div class="lesson-field-label">FIELD APPLICATION</div><div class="lesson-field-text">'+ls.application+'</div></div>';
+      html+='<div class="lesson-field"><div class="lesson-field-label">YOUR ACTION</div><div class="lesson-field-text">'+ls.action+'</div></div>';
+      if(!isDone){
+        html+='<button class="btn btn-primary lesson-complete-btn" onclick="completeLesson(\''+ls.id+'\',\''+src.id+'\')">Mark Complete ✓</button>';
+      }
+      html+='</div>';
+    });
+    html+='</div></div>';
+    el.innerHTML+=html;
   });
-
-  const avgScore = (totalScore / totalVirtues).toFixed(1);
-  const strongPercent = Math.round((totalStrong / totalVirtues) * 100);
-
-  return { avgScore, strongPercent, totalAthletes: athletes.length };
 }
 
-// ─── MODALS ───────────────────────────────────────────────────────────────────
-function Modal({title, onClose, children}) {
-  return (
-    <div style={{position:"fixed", inset:0, background:"rgba(0,0,0,0.75)", zIndex:500, display:"flex", alignItems:"center", justifyContent:"center"}} onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div style={{background:"#fff", borderRadius:16, width:"92%", maxWidth:720, maxHeight:"92vh", overflow:"hidden", boxShadow:"0 25px 70px rgba(0,0,0,0.25)"}}>
-        <div style={{padding:"18px 24px", borderBottom:"1px solid #dee2e6", display:"flex", justifyContent:"space-between", alignItems:"center"}}>
-          <span style={{fontSize:21, fontWeight:800, color:C.orange}}>{title}</span>
-          <button onClick={onClose} style={{fontSize:24, background:"none", border:"none", color:"#666"}}>✕</button>
-        </div>
-        <div style={{padding:24, overflowY:"auto", maxHeight:"78vh"}}>{children}</div>
-      </div>
-    </div>
-  );
+function toggleLesson(id){
+  var el=document.getElementById(id);
+  if(el) el.classList.toggle('open');
 }
 
-function ConfirmDelete({name, onConfirm, onCancel}) {
-  return (
-    <Modal title="Delete Athlete" onClose={onCancel}>
-      <p style={{fontSize:16, marginBottom:24}}>Are you sure you want to permanently delete <strong>{name}</strong>?</p>
-      <p style={{color:"#ef4444", marginBottom:24}}>This cannot be undone.</p>
-      <div style={{display:"flex", gap:12, justifyContent:"flex-end"}}>
-        <button onClick={onCancel} style={{padding:"12px 24px", border:"none", background:"#ddd", borderRadius:10}}>Cancel</button>
-        <button onClick={onConfirm} style={{padding:"12px 28px", border:"none", background:"#ef4444", color:"#fff", borderRadius:10, fontWeight:700}}>Yes, Delete</button>
-      </div>
-    </Modal>
-  );
+function completeLesson(lid, srcId){
+  if(S.completedLessons.indexOf(lid)===-1) S.completedLessons.push(lid);
+  var src=findSource(srcId);
+  if(src && S.domains[src.domain]!==undefined){
+    S.domains[src.domain]=Math.min(10,+(S.domains[src.domain]+0.3).toFixed(1));
+  }
+  save(); renderLearn(); renderDash();
 }
 
-// ─── EDIT MODAL ───────────────────────────────────────────────────────────────
-function EditModal({person, onSave, onClose}) {
-  const [data, setData] = useState({...person, notes: person.notes || ""});
-
-  const updateScore = (key, value) => setData(prev => ({...prev, scores: {...prev.scores, [key]: Number(value)}}));
-
-  return (
-    <Modal title={data.id ? "Edit Athlete" : "Add New Athlete"} onClose={onClose}>
-      <input placeholder="Athlete Name *" value={data.name||""} onChange={e=>setData({...data,name:e.target.value})} style={{width:"100%", padding:14, fontSize:17, border:`2px solid ${C.border}`, borderRadius:10, marginBottom:12}} />
-      <input placeholder="Role / Team (optional)" value={data.role||""} onChange={e=>setData({...data,role:e.target.value})} style={{width:"100%", padding:14, fontSize:17, border:`2px solid ${C.border}`, borderRadius:10, marginBottom:20}} />
-
-      <div style={{marginBottom:20}}>
-        <div style={{fontWeight:700, color:C.orange, marginBottom:12}}>Score Each Virtue (0–3)</div>
-        {Object.values(VIRTUES).map(t => (
-          <div key={t.key} style={{marginBottom:16, padding:16, background:"#fff", border:`1px solid ${t.border}`, borderRadius:12}}>
-            <div style={{display:"flex", alignItems:"center", gap:12, marginBottom:8}}>
-              <span style={{fontSize:28}}>{t.icon}</span>
-              <div style={{flex:1, fontWeight:700, color:t.color}}>{t.label}</div>
-            </div>
-            <div style={{fontSize:13, color:"#555", marginBottom:10}}>{t.scoreMeaning}</div>
-            <div style={{display:"flex", gap:6}}>
-              {[0,1,2,3].map(n => (
-                <button key={n} onClick={()=>updateScore(t.key,n)} style={{flex:1, padding:"10px", borderRadius:8, background: data.scores[t.key]===n ? C.orange : "#f1f3f5", color: data.scores[t.key]===n ? "#fff" : "#333", fontWeight:700}}>
-                  {n}
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{marginBottom:20}}>
-        <div style={{fontWeight:700, marginBottom:8}}>Notes / Observations / Prayers</div>
-        <textarea value={data.notes} onChange={e=>setData({...data, notes:e.target.value})} placeholder="Key moments, growth areas, specific prayers..." style={{width:"100%", height:130, padding:14, border:`2px solid ${C.border}`, borderRadius:10, resize:"vertical"}} />
-      </div>
-
-      <div style={{display:"flex", gap:12, justifyContent:"flex-end"}}>
-        <button onClick={onClose} style={{padding:"12px 24px", border:"none", background:"#ddd", borderRadius:10}}>Cancel</button>
-        <button onClick={()=>onSave(data)} style={{padding:"12px 32px", border:"none", background:C.orange, color:"#fff", borderRadius:10, fontWeight:700}} disabled={!data.name?.trim()}>💾 Save Changes</button>
-      </div>
-    </Modal>
-  );
+function findSource(id){
+  var all=LESSONS.fire.concat(LESSONS.leadership).concat(LESSONS.faith);
+  for(var i=0;i<all.length;i++){ if(all[i].id===id) return all[i]; }
+  return null;
 }
 
-// ─── PERSON DETAIL ────────────────────────────────────────────────────────────
-function PersonDetail({person, onClose, onEdit}) {
-  const [tab, setTab] = useState("assess");
-  const combo = getCombo(person.scores);
-
-  return (
-    <Modal title={person.name} onClose={onClose}>
-      <div style={{display:"flex", justifyContent:"space-between", marginBottom:20}}>
-        <div>
-          <div style={{fontSize:52}}>{combo.icon}</div>
-          <div style={{fontSize:24, fontWeight:800, color:combo.color}}>{combo.label}</div>
-        </div>
-        <button onClick={()=>{ onEdit(person); onClose(); }} style={{background:C.orange, color:"#fff", border:"none", padding:"10px 22px", borderRadius:10, fontWeight:700}}>✏ Edit</button>
-      </div>
-
-      <div style={{marginBottom:24}}>
-        <div style={{display:"flex", justifyContent:"space-between", fontSize:14, marginBottom:8}}>
-          <span>Character Progress</span>
-          <span>{combo.progress}%</span>
-        </div>
-        <div className="progress-bar">
-          <div className="progress-fill" style={{width: `${combo.progress}%`, background: combo.progress > 80 ? "linear-gradient(90deg,#00b36b,#34d399)" : combo.progress > 50 ? "linear-gradient(90deg,#ff8c00,#ffaa00)" : "#dc3545"}} />
-        </div>
-        <div style={{fontSize:13, color:C.textMuted, marginTop:6}}>
-          Last updated: {person.lastUpdated ? new Date(person.lastUpdated).toLocaleDateString() : "Never"}
-        </div>
-      </div>
-
-      <div style={{display:"flex", borderBottom:"3px solid #ff8c00", marginBottom:20}}>
-        {["assess","develop","notes"].map(t => (
-          <button key={t} onClick={()=>setTab(t)} style={{flex:1, padding:"14px", fontWeight:700, background:tab===t?C.orange:"#f1f3f5", color:tab===t?"#fff":"#333", border:"none"}}>
-            {t==="assess"?"📊 Profile":t==="develop"?"🛠 Develop":"📝 Notes"}
-          </button>
-        ))}
-      </div>
-
-      {tab==="assess" && Object.entries(person.scores).map(([k,v]) => {
-        const t = VIRTUES[k];
-        const showHas = v >= 2;
-        return (
-          <div key={k} style={{marginBottom:20, background:"#fff", border:`2px solid ${t.border}`, borderRadius:14, overflow:"hidden"}}>
-            <div style={{background:t.bg, padding:"16px 20px", display:"flex", alignItems:"center", gap:16}}>
-              <span style={{fontSize:42}}>{t.icon}</span>
-              <div style={{flex:1}}><div style={{fontSize:21, fontWeight:800, color:t.color}}>{t.label}</div></div>
-              <span style={{fontSize:18, fontWeight:700}}>{v}/3</span>
-            </div>
-            <div style={{padding:"20px"}}>
-              {(showHas ? t.strong : t.weak).map((s,i) => (
-                <div key={i} style={{marginBottom:6}}>{showHas?"→":"–"} {s}</div>
-              ))}
-            </div>
-          </div>
-        );
-      })}
-
-      {tab==="develop" && (
-        <div>
-          {Object.entries(person.scores).map(([k,v]) => {
-            const t = VIRTUES[k];
-            return (
-              <div key={k} style={{marginBottom:20, background:"#fff", border:`2px solid ${t.border}`, borderRadius:14, overflow:"hidden"}}>
-                <div style={{background:t.bg, padding:"14px 20px", display:"flex", alignItems:"center", gap:12}}>
-                  <span style={{fontSize:28}}>{t.icon}</span>
-                  <div style={{fontSize:18, fontWeight:800, color:t.color, flex:1}}>{t.label}</div>
-                  <span style={{fontSize:14, color:C.textMuted, background:"#fff", padding:"4px 10px", borderRadius:20, fontWeight:700}}>{SCORE_LABELS[v]}</span>
-                </div>
-                <div style={{padding:"16px 20px"}}>
-                  {t.develop.map((step,i) => (
-                    <div key={i} style={{display:"flex", gap:12, marginBottom:10, alignItems:"flex-start"}}>
-                      <span style={{background:C.orange, color:"#fff", borderRadius:"50%", width:22, height:22, display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:800, flexShrink:0}}>{i+1}</span>
-                      <span style={{fontSize:14, color:C.text, lineHeight:1.5}}>{step}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {tab==="notes" && (
-        <div style={{background:"#fff", border:`1px solid ${C.border}`, borderRadius:12, padding:24, minHeight:200, whiteSpace:"pre-wrap", fontSize:15}}>
-          {person.notes || "No notes added yet."}
-        </div>
-      )}
-    </Modal>
-  );
+// ══════════════════════════════════════════════════════════
+//  CHALLENGES
+// ══════════════════════════════════════════════════════════
+var curRating=0;
+function getTodayChallenge(){
+  var d=new Date();
+  return CHALLENGES[(d.getFullYear()*500+d.getMonth()*31+d.getDate())%CHALLENGES.length];
+}
+function getTodayKey(){
+  var d=new Date();
+  return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+}
+function renderChallenge(){
+  var c=getTodayChallenge();
+  var key=getTodayKey();
+  var done=S.challenges[key];
+  document.getElementById('ch-quote').textContent=c.quote;
+  document.getElementById('ch-quote-attr').textContent='— '+(c.author?c.author+', ':'')+c.source;
+  document.getElementById('ch-title').textContent=c.title;
+  document.getElementById('ch-body').textContent=c.body;
+  document.getElementById('ch-domain').textContent='Domain: '+c.domain;
+  document.getElementById('ch-application').textContent=c.application;
+  if(done){
+    document.getElementById('ch-rate-section').style.display='none';
+    document.getElementById('ch-done-section').style.display='block';
+    document.getElementById('ch-done-note').textContent=done.note||'No note added.';
+    document.getElementById('ch-done-rating').textContent='★'.repeat(done.rating)+'☆'.repeat(5-done.rating)+' — '+done.rating+'/5';
+  } else {
+    document.getElementById('ch-rate-section').style.display='block';
+    document.getElementById('ch-done-section').style.display='none';
+    setRating(0);
+    document.getElementById('ch-note').value='';
+  }
+}
+function setRating(v){
+  curRating=v;
+  document.querySelectorAll('.star').forEach(function(s,i){
+    s.classList.toggle('lit',i<v);
+  });
+}
+function completeChallenge(){
+  if(!curRating){alert('Please rate yourself first.');return;}
+  var key=getTodayKey();
+  var note=document.getElementById('ch-note').value.trim();
+  var c=getTodayChallenge();
+  S.challenges[key]={rating:curRating,note:note,domain:c.domain,title:c.title};
+  var yesterday=new Date(); yesterday.setDate(yesterday.getDate()-1);
+  var yk=yesterday.getFullYear()+'-'+(yesterday.getMonth()+1)+'-'+yesterday.getDate();
+  if(S.lastCompleted===yk||S.lastCompleted===null) S.streak++;
+  else if(S.lastCompleted!==key) S.streak=1;
+  S.lastCompleted=key;
+  if(S.domains[c.domain]!==undefined) S.domains[c.domain]=Math.min(10,+(S.domains[c.domain]+0.2).toFixed(1));
+  save(); renderChallenge(); renderDash();
 }
 
-const BLANK_ATHLETE = { id:"", name:"", role:"", notes:"", scores:{L:1,P:1,S:1,G:1,H:1,Gr:1,J:1}, lastUpdated: null };
+// ══════════════════════════════════════════════════════════
+//  PLAYBOOK
+// ══════════════════════════════════════════════════════════
+function renderPlaybook(){
+  var sc=document.getElementById('spark-cards');
+  sc.innerHTML='';
+  SPARKS.forEach(function(sp,i){ sc.innerHTML+=playCard('spark_'+i,sp.text,sp.source,'SPARK'); });
+  var pc=document.getElementById('play-cards');
+  pc.innerHTML='';
+  PLAYS.forEach(function(p,i){ pc.innerHTML+=playCard('play_'+i,p.body,p.title,p.tag); });
+  var oc=document.getElementById('oneonone-cards');
+  oc.innerHTML='';
+  ONEONONEPLAYS.forEach(function(p,i){ oc.innerHTML+=playCard('oo_'+i,p.body,p.title,p.tag); });
+  var fp=document.getElementById('faith-play-section');
+  var fc=document.getElementById('faith-play-cards');
+  if(S.faithOn){
+    fp.style.display='block'; fc.innerHTML='';
+    FAITH_PLAYS.forEach(function(p,i){ fc.innerHTML+=playCard('fp_'+i,p.body,p.title,p.tag); });
+  } else { fp.style.display='none'; }
+}
 
-// ─── MAIN APP ─────────────────────────────────────────────────────────────────
-function App() {
-  const [tab, setTab] = useState("athletes");
-  const [athletes, setAthletes] = useState(() => load("awaygame_athletes_v1", []));
-  const [editing, setEditing] = useState(null);
-  const [viewing, setViewing] = useState(null);
-  const [deleteConfirm, setDeleteConfirm] = useState(null);
+function playCard(id,body,title,tag){
+  return '<div class="play-card">'+
+    '<div class="play-card-header" onclick="togglePlay(\'pb_'+id+'\')">'+
+    '<div class="play-card-title">'+title+'</div>'+
+    '<div class="play-card-tag">'+tag+'</div>'+
+    '</div>'+
+    '<div class="play-card-body" id="pb_'+id+'">'+
+    '<div class="card-body">'+body+'</div>'+
+    '</div></div>';
+}
 
-  function saveAthlete(p) {
-    const updated = {...p, id: p.id || uid(), lastUpdated: Date.now()};
-    const next = p.id ? athletes.map(x => x.id === p.id ? updated : x) : [...athletes, updated];
-    setAthletes(next);
-    save("awaygame_athletes_v1", next);
-    setEditing(null);
+function togglePlay(id){
+  var el=document.getElementById(id);
+  if(el) el.classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════════════════
+//  EXPECTATIONS
+// ══════════════════════════════════════════════════════════
+function renderExpect(){
+  var mt=document.getElementById('mission-text');
+  mt.innerHTML=S.mission?S.mission:'<span class="mission-empty">Not yet written. Who are you as a leader?</span>';
+  document.getElementById('mission-input').value=S.mission||'';
+  var vt=document.getElementById('vision-text');
+  vt.innerHTML=S.vision?S.vision:'<span class="mission-empty">Not yet written. Where are you taking your people?</span>';
+  document.getElementById('vision-input').value=S.vision||'';
+  renderExpectDoc(); renderCrewNotes();
+}
+
+function saveMission(){
+  var v=document.getElementById('mission-input').value.trim();
+  if(!v){alert('Write something first.');return;}
+  S.mission=v; save(); renderExpect();
+}
+function saveVision(){
+  var v=document.getElementById('vision-input').value.trim();
+  if(!v){alert('Write something first.');return;}
+  S.vision=v; save(); renderExpect();
+}
+
+function renderExpectDoc(){
+  if(!S.expectVersions) S.expectVersions=[];
+  var liveDisplay=document.getElementById('expect-live-display');
+  var editor=document.getElementById('expect-editor');
+  var histSec=document.getElementById('expect-history-section');
+  var cancelBtn=document.getElementById('expect-cancel-btn');
+  if(S.expectVersions.length>0){
+    var current=S.expectVersions[0];
+    liveDisplay.style.display='block';
+    document.getElementById('expect-live-date').textContent=current.date;
+    document.getElementById('expect-live-text').textContent=current.text;
+    document.getElementById('expect-doc-input').value=current.text;
+    editor.style.display='none';
+    cancelBtn.style.display='';
+  } else {
+    liveDisplay.style.display='none';
+    editor.style.display='block';
+    cancelBtn.style.display='none';
+  }
+  if(S.expectVersions.length>1){
+    histSec.style.display='block';
+    var hl=document.getElementById('expect-history-list');
+    hl.innerHTML='';
+    for(var i=1;i<S.expectVersions.length;i++){
+      var v=S.expectVersions[i];
+      hl.innerHTML+='<div class="card" style="margin-bottom:10px;">'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'+
+        '<div style="font-family:\'Cinzel\',serif;font-size:9px;letter-spacing:2px;color:var(--gold-dim);">VERSION '+(S.expectVersions.length-i)+'</div>'+
+        '<div style="font-size:10px;color:var(--ink-faint);">'+v.date+'</div></div>'+
+        '<div class="card-body" style="white-space:pre-wrap;font-size:13px;color:var(--ink-mid);line-height:1.7;">'+
+        v.text.substring(0,300)+(v.text.length>300?'\n\n[...]':'')+'</div></div>';
+    }
+  } else { histSec.style.display='none'; }
+}
+
+function openExpectEditor(){
+  document.getElementById('expect-editor').style.display='block';
+  document.getElementById('expect-live-display').style.display='none';
+  document.getElementById('expect-cancel-btn').style.display='';
+  document.getElementById('expect-doc-input').focus();
+}
+function cancelExpectEdit(){
+  document.getElementById('expect-editor').style.display='none';
+  document.getElementById('expect-live-display').style.display='block';
+}
+function saveExpectDoc(){
+  var txt=document.getElementById('expect-doc-input').value.trim();
+  if(!txt){alert('Write your expectations first.');return;}
+  if(!S.expectVersions) S.expectVersions=[];
+  if(S.expectVersions.length>0 && S.expectVersions[0].text===txt){alert('No changes detected.');return;}
+  S.expectVersions.unshift({text:txt,date:new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})});
+  if(S.expectVersions.length>20) S.expectVersions=S.expectVersions.slice(0,20);
+  save(); renderExpect(); renderDash();
+}
+
+function addCrewNote(){
+  var name=document.getElementById('crew-name-input').value.trim();
+  var note=document.getElementById('crew-note-input').value.trim();
+  if(!name||!note){alert('Please fill in both name and note.');return;}
+  S.crewNotes.push({id:Date.now(),name:name,note:note,date:new Date().toLocaleDateString()});
+  document.getElementById('crew-note-input').value='';
+  save(); renderCrewNotes();
+}
+function renderCrewNotes(){
+  var el=document.getElementById('crew-notes-list');
+  if(!S.crewNotes||!S.crewNotes.length){
+    el.innerHTML='<div class="card"><div class="card-body" style="color:var(--ink-faint);font-style:italic;text-align:center;">No crew notes yet.</div></div>';
+    return;
+  }
+  var groups={};
+  S.crewNotes.forEach(function(n){ if(!groups[n.name]) groups[n.name]=[]; groups[n.name].push(n); });
+  var html='';
+  Object.keys(groups).forEach(function(name){
+    html+='<div class="expect-category"><div class="expect-category-title">'+name+'</div>';
+    groups[name].forEach(function(n){
+      html+='<div class="expect-item"><div class="expect-item-text">'+n.note+'</div>';
+      html+='<div class="expect-item-date">'+n.date+'</div>';
+      html+='<button class="expect-delete" onclick="deleteCrewNote('+n.id+')">✕</button></div>';
+    });
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+function deleteCrewNote(id){
+  S.crewNotes=S.crewNotes.filter(function(n){return n.id!==id;});
+  save(); renderCrewNotes();
+}
+
+// ══════════════════════════════════════════════════════════
+//  GROWTH
+// ══════════════════════════════════════════════════════════
+function renderGrowth(){
+  var el=document.getElementById('growth-sliders');
+  el.innerHTML='';
+  DOMAINS.forEach(function(d){
+    var v=S.domains[d]||0;
+    var key=d.replace(/[^a-z]/gi,'');
+    el.innerHTML+='<div style="margin-bottom:14px;">'+
+      '<div style="display:flex;justify-content:space-between;margin-bottom:5px;">'+
+      '<label style="font-size:13px;color:var(--ink-mid);font-style:italic;">'+DICONS[d]+' '+d+'</label>'+
+      '<span id="sv_'+key+'" style="font-size:11px;color:var(--ink-faint);">'+v+'/10</span></div>'+
+      '<input type="range" min="0" max="10" value="'+v+'" step="0.5" data-domain="'+d+'" oninput="updSlider(this)" style="width:100%;accent-color:var(--gold-dim);cursor:pointer;">'+
+      '</div>';
+  });
+  renderCommitment();
+  renderGrowthHistory();
+}
+function updSlider(el){
+  var d=el.dataset.domain, v=parseFloat(el.value);
+  S.domains[d]=v;
+  var key=d.replace(/[^a-z]/gi,'');
+  var lbl=document.getElementById('sv_'+key);
+  if(lbl) lbl.textContent=v+'/10';
+}
+function saveGrowth(){
+  var entry={date:new Date().toLocaleDateString(),scores:{}};
+  DOMAINS.forEach(function(d){entry.scores[d]=S.domains[d];});
+  S.growthHistory.unshift(entry);
+  if(S.growthHistory.length>12) S.growthHistory.pop();
+  save(); renderGrowthHistory(); renderDash();
+  alert('✓ Check-in saved.');
+}
+function renderGrowthHistory(){
+  var el=document.getElementById('growth-history');
+  if(!S.growthHistory||!S.growthHistory.length){
+    el.innerHTML='<div class="card"><div class="card-body" style="color:var(--ink-faint);font-style:italic;text-align:center;">Complete your first check-in to begin tracking your arc.</div></div>';
+    return;
+  }
+  el.innerHTML='';
+  S.growthHistory.forEach(function(entry){
+    var avg=0;
+    DOMAINS.forEach(function(d){avg+=(entry.scores[d]||0);});
+    avg=(avg/DOMAINS.length).toFixed(1);
+    el.innerHTML+='<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">'+
+      '<div class="card-title" style="font-size:14px;">'+entry.date+'</div>'+
+      '<div style="font-size:12px;color:var(--gold-dim);">Avg: '+avg+'/10</div></div>'+
+      DOMAINS.map(function(d){
+        var s=entry.scores[d]||0;
+        return '<div class="domain-row" style="margin-bottom:5px;"><div class="domain-name" style="font-size:10px;">'+DICONS[d]+' '+d+'</div>'+
+          '<div class="domain-bar-bg"><div class="domain-bar-fill" style="width:'+(s*10)+'%;"></div></div>'+
+          '<div class="domain-score">'+s+'</div></div>';
+      }).join('')+'</div>';
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+//  30-DAY COMMITMENT
+// ══════════════════════════════════════════════════════════
+function commitDateKey(d){
+  return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+}
+
+function renderCommitment(){
+  var el=document.getElementById('commitment-section');
+  if(!el) return;
+  var c=S.commitment;
+
+  if(!c||!c.text||!c.startDate){
+    el.innerHTML='<div class="card">'+
+      '<div class="card-body" style="font-style:italic;margin-bottom:12px;font-size:13px;line-height:1.7;">Set one leadership commitment and hold it for 30 days. Systems over goals. This is the system.</div>'+
+      '<textarea class="input-field" id="commit-input" rows="2" placeholder="For the next 30 days, I will..." style="resize:none;margin-bottom:10px;font-size:14px;"></textarea>'+
+      '<button class="btn btn-primary btn-block" onclick="saveCommitment()">Begin 30-Day Commitment</button>'+
+      '</div>';
+    return;
   }
 
-  function deleteAthlete(id) {
-    const next = athletes.filter(a => a.id !== id);
-    setAthletes(next);
-    save("awaygame_athletes_v1", next);
-    setDeleteConfirm(null);
-    if (viewing && viewing.id === id) setViewing(null);
+  var start=new Date(c.startDate.replace(/-/g,'/')); // cross-browser date parse
+  start.setHours(0,0,0,0);
+  var today=new Date(); today.setHours(0,0,0,0);
+  var dayNum=Math.floor((today-start)/86400000);
+  var daysIn=dayNum+1;
+  var todayKey=commitDateKey(today);
+  var todayDone=c.log[todayKey]===true;
+  var isComplete=dayNum>=30;
+
+  // Streak
+  var streak=0;
+  var dd=new Date(today);
+  for(var si=0;si<30;si++){
+    var sk=commitDateKey(dd);
+    if(c.log[sk]){streak++;dd.setDate(dd.getDate()-1);}
+    else break;
   }
 
-  const teamStats = calculateTeamProgress(athletes);
+  // Rate
+  var loggedDays=Object.keys(c.log).filter(function(k){return c.log[k];}).length;
+  var total=Math.min(daysIn,30);
+  var rate=total>0?Math.round((loggedDays/total)*100):0;
+  var daysLeft=Math.max(0,30-daysIn);
 
-  return (
-    <div style={{minHeight:"100vh", background:"#f8f9fa"}}>
-      {/* HEADER */}
-      <div style={{background:"#fff", borderBottom:"4px solid #ff8c00", padding:"0 24px", height:76, display:"flex", alignItems:"center", justifyContent:"space-between", boxShadow:"0 3px 12px rgba(0,0,0,0.1)"}}>
-        <div>
-          <div style={{fontFamily:"'Barlow Condensed',sans-serif", fontWeight:900, fontSize:32, letterSpacing:1.5, color:C.orange}}>AWAY GAME</div>
-          <div style={{fontSize:13, color:"#555"}}>Christian Parent’s Playbook</div>
-        </div>
-        <div style={{display:"flex", gap:8}}>
-          <button onClick={()=>setTab("athletes")} style={{padding:"10px 22px", borderRadius:10, background:tab==="athletes"?C.orange:"#fff", color:tab==="athletes"?"#fff":"#333", fontWeight:700, border:"2px solid #ff8c00"}}>👥 My Athletes</button>
-          <button onClick={()=>setTab("playbook")} style={{padding:"10px 22px", borderRadius:10, background:tab==="playbook"?C.orange:"#fff", color:tab==="playbook"?"#fff":"#333", fontWeight:700, border:"2px solid #ff8c00"}}>📖 The Playbook</button>
-        </div>
-      </div>
+  // Build 30-day grid
+  var grid='<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px;">';
+  for(var gi=0;gi<30;gi++){
+    var gd=new Date(start); gd.setDate(gd.getDate()+gi);
+    var gk=commitDateKey(gd);
+    var isPast=gd<=today;
+    var isToday=gk===todayKey;
+    var isDone=c.log[gk]===true;
+    var bg=!isPast?'var(--parchment-mid)':(isDone?'var(--gold-dim)':'rgba(139,37,0,0.2)');
+    var border=isToday?'2px solid var(--gold)':'1px solid rgba(0,0,0,0.06)';
+    var color=isDone?'rgba(255,255,255,0.7)':'var(--ink-faint)';
+    grid+='<div style="width:28px;height:28px;border-radius:5px;background:'+bg+';border:'+border+
+      ';display:flex;align-items:center;justify-content:center;font-size:8px;font-family:\'Cinzel\',serif;color:'+color+
+      ';flex-shrink:0;">'+(gi+1)+'</div>';
+  }
+  grid+='</div>';
 
-      {tab === "athletes" && (
-        <div style={{padding:24}}>
-          {/* TEAM PROGRESS DASHBOARD */}
-          {athletes.length > 0 && (
-            <div className="team-card" style={{marginBottom:32}}>
-              <div style={{fontSize:20, fontWeight:800, marginBottom:16, color:C.orange}}>Team Progress Overview</div>
-              <div style={{display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(180px, 1fr))", gap:20}}>
-                <div>
-                  <div style={{fontSize:13, color:C.textMuted}}>Team Average Score</div>
-                  <div style={{fontSize:32, fontWeight:800, color:C.orange}}>{teamStats.avgScore}</div>
-                  <div style={{fontSize:13}}>out of 3.0</div>
-                </div>
-                <div>
-                  <div style={{fontSize:13, color:C.textMuted}}>Strong Virtues</div>
-                  <div style={{fontSize:32, fontWeight:800, color: teamStats.strongPercent > 70 ? C.green : C.orange}}>{teamStats.strongPercent}%</div>
-                </div>
-                <div>
-                  <div style={{fontSize:13, color:C.textMuted}}>Athletes Tracked</div>
-                  <div style={{fontSize:32, fontWeight:800}}>{teamStats.totalAthletes}</div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:28}}>
-            <h1 style={{fontSize:28, fontWeight:800}}>My Athletes</h1>
-            <button onClick={()=>setEditing(BLANK_ATHLETE)} style={{background:C.orange, color:"#fff", border:"none", padding:"12px 28px", borderRadius:12, fontWeight:700}}>＋ Add Athlete</button>
-          </div>
-
-          {athletes.length === 0 ? (
-            <div style={{textAlign:"center", padding:"120px 20px", color:"#666"}}>
-              <div style={{fontSize:80}}>⚽️🏀🏈</div>
-              <div style={{fontSize:24, margin:"20px 0"}}>Start building your team’s character</div>
-              <button onClick={()=>setEditing(BLANK_ATHLETE)} style={{background:C.orange, color:"#fff", padding:"14px 36px", borderRadius:12, fontSize:17, fontWeight:700}}>Add Your First Athlete</button>
-            </div>
-          ) : (
-            <div style={{display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(310px, 1fr))", gap:20}}>
-              {athletes.map(p => {
-                const combo = getCombo(p.scores);
-                return (
-                  <div key={p.id} style={{background:"#fff", border:`1px solid ${C.border}`, borderRadius:16, padding:22, boxShadow:"0 6px 20px rgba(0,0,0,0.07)", position:"relative"}}>
-                    <button 
-                      onClick={(e)=>{e.stopPropagation(); setDeleteConfirm(p);}} 
-                      className="delete-btn" 
-                      style={{position:"absolute", top:12, right:12}}
-                    >
-                      🗑
-                    </button>
-                    
-                    <div onClick={()=>setViewing(p)} style={{cursor:"pointer"}}>
-                      <div style={{fontSize:22, fontWeight:800, marginBottom:8}}>{p.name}</div>
-                      {p.role && <div style={{color:C.textSub, marginBottom:12}}>{p.role}</div>}
-                      
-                      <div style={{display:"flex", gap:8, flexWrap:"wrap", marginBottom:16}}>
-                        {Object.entries(p.scores).map(([k,v]) => (
-                          <div key={k} style={{background:VIRTUES[k].bg, padding:"6px 10px", borderRadius:8, fontSize:14}}>{VIRTUES[k].icon} {v}</div>
-                        ))}
-                      </div>
-
-                      <div style={{marginBottom:12}}>
-                        <div className="progress-bar">
-                          <div className="progress-fill" style={{width: `${combo.progress}%`, background: combo.progress > 80 ? "linear-gradient(90deg,#00b36b,#34d399)" : combo.progress > 50 ? "linear-gradient(90deg,#ff8c00,#ffaa00)" : "#dc3545"}} />
-                        </div>
-                      </div>
-
-                      <div style={{fontSize:13, color:C.textMuted}}>Last updated: {p.lastUpdated ? new Date(p.lastUpdated).toLocaleDateString() : "Never"}</div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
-
-      {tab === "playbook" && (
-        <div style={{padding:24, maxWidth:820, margin:"0 auto"}}>
-          <h2 style={{color:C.orange, marginBottom:8}}>The Seven Virtues</h2>
-          <p style={{color:C.textSub, marginBottom:32}}>Fruit of the Spirit applied to youth sports.</p>
-          {Object.values(VIRTUES).map(t => (
-            <div key={t.key} style={{marginBottom:24, background:"#fff", border:`1px solid ${t.border}`, borderRadius:16, padding:24}}>
-              <div style={{display:"flex", alignItems:"center", gap:16}}>
-                <span style={{fontSize:48}}>{t.icon}</span>
-                <div>
-                  <div style={{fontSize:22, fontWeight:800, color:t.color}}>{t.label}</div>
-                  <div style={{color:C.textSub}}>"{t.tagline}"</div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {editing && <EditModal person={editing} onSave={saveAthlete} onClose={()=>setEditing(null)} />}
-      {viewing && <PersonDetail person={viewing} onClose={()=>setViewing(null)} onEdit={p=>{setViewing(null); setEditing(p);}} />}
-      {deleteConfirm && <ConfirmDelete name={deleteConfirm.name} onConfirm={()=>deleteAthlete(deleteConfirm.id)} onCancel={()=>setDeleteConfirm(null)} />}
-    </div>
-  );
+  var html='<div class="card card-accent">';
+  // Header
+  html+='<div style="background:linear-gradient(135deg,var(--leather-dark),var(--leather-mid));border-radius:4px;padding:14px 16px;margin:-16px -16px 14px;">';
+  html+='<div style="font-family:\'Cinzel\',serif;font-size:8px;letter-spacing:3px;color:var(--gold-dim);margin-bottom:6px;">30-DAY COMMITMENT</div>';
+  html+='<div style="font-family:\'Playfair Display\',serif;font-style:italic;font-size:14px;color:var(--parchment);line-height:1.6;">'+c.text+'</div>';
+  html+='</div>';
+  // Stats
+  html+='<div style="display:flex;gap:8px;margin-bottom:14px;">';
+  html+='<div class="commit-stat"><div class="commit-stat-num">'+streak+'</div><div class="commit-stat-label">Streak</div></div>';
+  html+='<div class="commit-stat"><div class="commit-stat-num">'+rate+'%</div><div class="commit-stat-label">Completion</div></div>';
+  html+='<div class="commit-stat"><div class="commit-stat-num">'+daysLeft+'</div><div class="commit-stat-label">Days Left</div></div>';
+  html+='</div>';
+  // Grid
+  html+=grid;
+  // Today action
+  if(!isComplete){
+    if(!todayDone){
+      html+='<button class="btn btn-primary btn-block" onclick="logCommitmentDay()">✓ Mark Today Complete</button>';
+    } else {
+      html+='<div style="display:flex;align-items:center;gap:10px;justify-content:center;padding:11px;background:rgba(45,90,27,0.07);border-radius:6px;border:1px solid rgba(45,90,27,0.18);">';
+      html+='<span style="color:var(--success);font-size:20px;">✓</span>';
+      html+='<span style="font-size:14px;color:var(--success);font-style:italic;font-family:\'EB Garamond\',serif;">Today complete. Stay the course.</span></div>';
+    }
+  } else {
+    html+='<div style="text-align:center;padding:16px 0 8px;">';
+    html+='<div style="font-size:30px;margin-bottom:8px;">🏆</div>';
+    html+='<div style="font-family:\'Playfair Display\',serif;font-size:16px;color:var(--ink);margin-bottom:4px;">30 days. Done.</div>';
+    html+='<div style="font-size:13px;color:var(--ink-faint);font-style:italic;">Completion rate: '+rate+'% · Start a new one?</div></div>';
+  }
+  html+='<div style="margin-top:10px;text-align:right;">';
+  html+='<button onclick="resetCommitment()" style="background:none;border:none;font-size:11px;color:var(--ink-faint);cursor:pointer;font-family:\'EB Garamond\',serif;font-style:italic;text-decoration:underline;">Abandon commitment</button>';
+  html+='</div>';
+  html+='</div>';
+  el.innerHTML=html;
 }
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(React.createElement(App));
+function saveCommitment(){
+  var input=document.getElementById('commit-input');
+  if(!input) return;
+  var txt=input.value.trim();
+  if(!txt){alert('Write your commitment first.');return;}
+  var today=new Date();
+  S.commitment={text:txt,startDate:commitDateKey(today),log:{}};
+  save(); renderCommitment();
+  showToast('📅 30-Day Commitment begins today.');
+}
+
+function logCommitmentDay(){
+  var today=new Date();
+  var key=commitDateKey(today);
+  S.commitment.log[key]=true;
+  save(); renderCommitment();
+  checkMilestones(); renderLevel();
+  showToast('✓ Day logged. Keep going.');
+}
+
+function resetCommitment(){
+  if(!confirm('Abandon this commitment? Your log will be cleared.')) return;
+  S.commitment={text:'',startDate:'',log:{}};
+  save(); renderCommitment();
+}
+
+// ══════════════════════════════════════════════════════════
+//  JOURNAL
+// ══════════════════════════════════════════════════════════
+function saveJournal(){
+  var title=document.getElementById('j-title').value.trim();
+  var body=document.getElementById('j-body').value.trim();
+  if(!body){alert('Write something first.');return;}
+  S.journal.unshift({id:Date.now(),date:new Date().toLocaleDateString(),title:title||'Untitled',body:body});
+  document.getElementById('j-title').value='';
+  document.getElementById('j-body').value='';
+  save(); renderJournal();
+}
+function renderJournal(){
+  var el=document.getElementById('journal-list');
+  if(!S.journal||!S.journal.length){
+    el.innerHTML='<div class="card"><div class="card-body" style="color:var(--ink-faint);font-style:italic;text-align:center;">No entries yet. Your story starts here.</div></div>';
+    return;
+  }
+  el.innerHTML='';
+  S.journal.forEach(function(e){
+    el.innerHTML+='<div class="card">'+
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">'+
+      '<div class="card-title" style="font-size:14px;">'+e.title+'</div>'+
+      '<div style="font-size:10px;color:var(--ink-faint);white-space:nowrap;margin-left:8px;margin-top:3px;">'+e.date+'</div></div>'+
+      '<div class="card-body" style="white-space:pre-wrap;font-size:13px;">'+e.body.substring(0,200)+(e.body.length>200?'…':'')+'</div>'+
+      '<div style="margin-top:10px;"><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;" onclick="deleteJournal('+e.id+')">Delete</button></div>'+
+      '</div>';
+  });
+}
+function deleteJournal(id){
+  if(!confirm('Delete this entry?')) return;
+  S.journal=S.journal.filter(function(e){return e.id!==id;});
+  save(); renderJournal();
+}
+
+// ══════════════════════════════════════════════════════════
+//  SETTINGS
+// ══════════════════════════════════════════════════════════
+function renderSettings(){
+  document.getElementById('settings-name').value=S.userName;
+  document.getElementById('faith-toggle').classList.toggle('on',S.faithOn);
+}
+function saveName(){
+  var n=document.getElementById('settings-name').value.trim();
+  if(!n) return;
+  S.userName=n; save(); renderDash(); alert('Name updated.');
+}
+function toggleFaith(){
+  S.faithOn=!S.faithOn; save(); updateFaithUI();
+  renderLearn(); renderPlaybook(); renderDash(); renderScripture();
+}
+function enableFaith(){
+  S.faithOn=true; save(); updateFaithUI();
+  renderLearn(); renderPlaybook(); renderDash(); renderScripture();
+  alert('✝ Faith content enabled. Adjust anytime in Settings.');
+}
+function updateFaithUI(){
+  document.getElementById('faith-toggle').classList.toggle('on',S.faithOn);
+}
+
+// ══════════════════════════════════════════════════════════
+//  EXPORT / IMPORT / RESET
+// ══════════════════════════════════════════════════════════
+function exportData(){
+  var blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url; a.download='becoming-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click(); URL.revokeObjectURL(url);
+}
+function importData(ev){
+  var file=ev.target.files[0]; if(!file) return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var imp=JSON.parse(e.target.result);
+      if(!confirm('Replace all current data with this backup?')) return;
+      Object.assign(S,imp);
+      DOMAINS.forEach(function(d){if(S.domains[d]===undefined)S.domains[d]=0;});
+      if(!S.expectations) S.expectations=[];
+      if(!S.crewNotes) S.crewNotes=[];
+      if(!S.expectVersions) S.expectVersions=[];
+      if(!S.commitment) S.commitment={text:'',startDate:'',log:{}};
+      save(); initApp(); alert('✓ Data imported.');
+    }catch(err){alert('Could not read file. Use a valid BECOMING backup.');}
+  };
+  reader.readAsText(file);
+  ev.target.value='';
+}
+function confirmReset(){
+  if(!confirm('This will erase ALL data. Cannot be undone. Sure?')) return;
+  localStorage.removeItem('becoming_v2'); location.reload();
+}
+
+// ══════════════════════════════════════════════════════════
+//  PHASE 3 — RADAR, XP, MILESTONES, SCRIPTURE, TOAST
+// ══════════════════════════════════════════════════════════
+var SCRIPTURES=[
+  {ref:'Joshua 1:9',text:'Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.'},
+  {ref:'Mark 10:43',text:'Whoever wants to become great among you must be your servant.'},
+  {ref:'Proverbs 27:17',text:'As iron sharpens iron, so one person sharpens another.'},
+  {ref:'Nehemiah 4:14',text:'Remember the Lord, who is great and awesome, and fight for your families, your sons and your daughters, your wives and your homes.'},
+  {ref:'Proverbs 11:14',text:'For lack of guidance a nation falls, but victory is won through many advisers.'},
+  {ref:'Matthew 5:16',text:'Let your light shine before others, that they may see your good deeds and glorify your Father in heaven.'},
+  {ref:'Romans 5:3-4',text:'Suffering produces perseverance; perseverance, character; and character, hope.'},
+  {ref:'Daniel 6:3',text:'Daniel so distinguished himself by his exceptional qualities that the king planned to set him over the whole kingdom.'},
+  {ref:'Colossians 3:23',text:'Whatever you do, work at it with all your heart, as working for the Lord, not for human masters.'},
+  {ref:'Proverbs 29:18',text:'Where there is no vision, the people perish.'},
+  {ref:'Micah 6:8',text:'What does the Lord require of you? To act justly and to love mercy and to walk humbly with your God.'},
+  {ref:'1 Corinthians 9:24',text:'Run in such a way as to get the prize. Everyone who competes goes into strict training.'},
+];
+
+var MILESTONES=[
+  {id:'start',     icon:'📖',name:'Journey Started',      desc:'You opened the book.',                               xp:0,  check:function(){return true;}},
+  {id:'first_ch',  icon:'⚔', name:'First Challenge',      desc:'Complete your first daily challenge.',               xp:10, check:function(){return Object.keys(S.challenges).length>=1;}},
+  {id:'streak_3',  icon:'🔥',name:'3-Day Streak',         desc:'3 consecutive days of challenges.',                  xp:25, check:function(){return S.streak>=3;}},
+  {id:'streak_7',  icon:'🔥',name:'Week of Fire',         desc:'7-day challenge streak.',                            xp:50, check:function(){return S.streak>=7;}},
+  {id:'streak_30', icon:'🏆',name:'Month of Becoming',    desc:'30-day challenge streak.',                           xp:150,check:function(){return S.streak>=30;}},
+  {id:'lesson_1',  icon:'📚',name:'First Lesson',         desc:'Complete your first lesson.',                        xp:15, check:function(){return S.completedLessons.length>=1;}},
+  {id:'lesson_10', icon:'📚',name:'Ten Lessons Deep',     desc:'Complete 10 lessons.',                               xp:60, check:function(){return S.completedLessons.length>=10;}},
+  {id:'lesson_25', icon:'🎓',name:'Scholar',              desc:'Complete 25 lessons.',                               xp:120,check:function(){return S.completedLessons.length>=25;}},
+  {id:'lesson_all',icon:'🦅',name:'The Complete Leader',  desc:'Complete 60+ lessons across all tracks.',            xp:300,check:function(){return S.completedLessons.length>=60;}},
+  {id:'checkin_1', icon:'📊',name:'Self-Aware',           desc:'Complete your first growth check-in.',               xp:20, check:function(){return S.growthHistory.length>=1;}},
+  {id:'checkin_6', icon:'📈',name:'Six Months of Growth', desc:'Six growth check-ins completed.',                    xp:80, check:function(){return S.growthHistory.length>=6;}},
+  {id:'journal_1', icon:'✍', name:'First Entry',          desc:'Write your first journal entry.',                    xp:10, check:function(){return S.journal.length>=1;}},
+  {id:'journal_10',icon:'📓',name:'Storyteller',          desc:'Ten journal entries written.',                       xp:40, check:function(){return S.journal.length>=10;}},
+  {id:'mission',   icon:'🧭',name:'Mission Defined',      desc:'Write your personal mission statement.',             xp:30, check:function(){return !!S.mission;}},
+  {id:'vision',    icon:'🌅',name:'Vision Cast',          desc:'Write your leadership vision statement.',            xp:30, check:function(){return !!S.vision;}},
+  {id:'expect',    icon:'📐',name:'Standard Bearer',      desc:'Write your expectations document.',                  xp:35, check:function(){return !!(S.expectVersions&&S.expectVersions.length>=1);}},
+  {id:'expect_rev',icon:'🔁',name:'Raising the Standard', desc:'Revise your expectations 3 times.',                  xp:50, check:function(){return !!(S.expectVersions&&S.expectVersions.length>=3);}},
+  {id:'domain_5',  icon:'⚡',name:'Well-Rounded',         desc:'All nine domains rated above 5.',                    xp:100,check:function(){return DOMAINS.every(function(d){return (S.domains[d]||0)>=5;});}},
+  {id:'domain_8',  icon:'🌟',name:'Forged',               desc:'All nine domains rated at 8 or above.',              xp:250,check:function(){return DOMAINS.every(function(d){return (S.domains[d]||0)>=8;});}},
+  {id:'crew_5',    icon:'👥',name:'The Developer',        desc:'Add notes for 5 different crew members.',            xp:40, check:function(){var n={};(S.crewNotes||[]).forEach(function(x){n[x.name]=1;});return Object.keys(n).length>=5;}},
+  {id:'commit_7',  icon:'📅',name:'7-Day Hold',           desc:'Log 7 days on a 30-day commitment.',                 xp:30, check:function(){if(!S.commitment||!S.commitment.log)return false;return Object.keys(S.commitment.log).filter(function(k){return S.commitment.log[k];}).length>=7;}},
+  {id:'commit_done',icon:'🏆',name:'30-Day Champion',     desc:'Complete a 30-day commitment (80%+ rate).',          xp:120,check:function(){
+    if(!S.commitment||!S.commitment.startDate) return false;
+    var s=new Date(S.commitment.startDate.replace(/-/g,'/')); s.setHours(0,0,0,0);
+    var t=new Date(); t.setHours(0,0,0,0);
+    var dn=Math.floor((t-s)/86400000);
+    if(dn<29) return false;
+    var done=Object.keys(S.commitment.log).filter(function(k){return S.commitment.log[k];}).length;
+    return done>=24;
+  }},
+];
+
+var LEVEL_THRESHOLDS=[0,50,120,220,360,550,800,1100,1500,2000,2700];
+var LEVEL_TITLES=['Recruit','Firefighter','Driver','Lieutenant','Captain','Battalion Chief','Deputy Chief','Chief','Commander','Legend','Forged'];
+
+function calcXP(){
+  var xp=0;
+  MILESTONES.forEach(function(m){ if(earnedMilestone(m)) xp+=m.xp; });
+  xp+=Object.keys(S.challenges).length*5;
+  xp+=S.completedLessons.length*3;
+  xp+=(S.growthHistory.length||0)*8;
+  xp+=(S.journal.length||0)*2;
+  if(S.commitment&&S.commitment.log) xp+=Object.keys(S.commitment.log).filter(function(k){return S.commitment.log[k];}).length*2;
+  return xp;
+}
+function getLevel(xp){ var lv=0; for(var i=0;i<LEVEL_THRESHOLDS.length;i++){if(xp>=LEVEL_THRESHOLDS[i])lv=i;} return lv; }
+function getLevelProgress(xp){ var lv=getLevel(xp); if(lv>=LEVEL_TITLES.length-1)return 100; var lo=LEVEL_THRESHOLDS[lv],hi=LEVEL_THRESHOLDS[lv+1]; return Math.round(((xp-lo)/(hi-lo))*100); }
+function earnedMilestone(m){ try{return m.check();}catch(e){return false;} }
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  if(!t)return;
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2800);
+}
+
+function checkMilestones(){
+  var newlyEarned=[];
+  MILESTONES.forEach(function(m){
+    var key='ml_'+m.id;
+    if(earnedMilestone(m)&&!S[key]){S[key]=true;newlyEarned.push(m);}
+  });
+  if(newlyEarned.length){
+    save();
+    newlyEarned.forEach(function(m,i){
+      setTimeout(function(){showToast(m.icon+' Milestone: '+m.name+' (+'+m.xp+' XP)');},i*3200);
+    });
+    renderMilestones(); renderDashBadges();
+  }
+}
+
+function drawRadar(canvasId, size){
+  var cv=document.getElementById(canvasId);
+  if(!cv)return;
+  var ctx2=cv.getContext('2d');
+  var cx=size/2, cy=size/2, r=size*0.36, n=DOMAINS.length;
+  ctx2.clearRect(0,0,size,size);
+  for(var ring=1;ring<=5;ring++){
+    var rr=r*(ring/5);
+    ctx2.beginPath();
+    for(var i=0;i<n;i++){
+      var a=(Math.PI*2*i/n)-Math.PI/2;
+      var px=cx+rr*Math.cos(a), py=cy+rr*Math.sin(a);
+      if(i===0)ctx2.moveTo(px,py); else ctx2.lineTo(px,py);
+    }
+    ctx2.closePath();
+    ctx2.strokeStyle='rgba(164,140,80,0.18)'; ctx2.lineWidth=1; ctx2.stroke();
+    if(ring===5){ctx2.fillStyle='rgba(164,140,80,0.04)';ctx2.fill();}
+  }
+  for(var i=0;i<n;i++){
+    var a=(Math.PI*2*i/n)-Math.PI/2;
+    ctx2.beginPath();ctx2.moveTo(cx,cy);ctx2.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
+    ctx2.strokeStyle='rgba(164,140,80,0.15)';ctx2.lineWidth=1;ctx2.stroke();
+  }
+  ctx2.beginPath();
+  for(var i=0;i<n;i++){
+    var a=(Math.PI*2*i/n)-Math.PI/2;
+    var val=(S.domains[DOMAINS[i]]||0)/10;
+    var px=cx+(r*val)*Math.cos(a), py=cy+(r*val)*Math.sin(a);
+    if(i===0)ctx2.moveTo(px,py); else ctx2.lineTo(px,py);
+  }
+  ctx2.closePath();
+  var g=ctx2.createLinearGradient(cx-r,cy-r,cx+r,cy+r);
+  g.addColorStop(0,'rgba(201,168,76,0.3)');g.addColorStop(1,'rgba(138,106,42,0.18)');
+  ctx2.fillStyle=g;ctx2.fill();
+  ctx2.strokeStyle='rgba(201,168,76,0.8)';ctx2.lineWidth=1.8;ctx2.stroke();
+  for(var i=0;i<n;i++){
+    var a=(Math.PI*2*i/n)-Math.PI/2;
+    var val=(S.domains[DOMAINS[i]]||0)/10;
+    ctx2.beginPath();ctx2.arc(cx+(r*val)*Math.cos(a),cy+(r*val)*Math.sin(a),3.5,0,Math.PI*2);
+    ctx2.fillStyle='#c9a84c';ctx2.fill();
+  }
+  ctx2.textAlign='center';ctx2.textBaseline='middle';
+  for(var i=0;i<n;i++){
+    var a=(Math.PI*2*i/n)-Math.PI/2;
+    var lr=r+size*0.1;
+    var lx=cx+lr*Math.cos(a), ly=cy+lr*Math.sin(a);
+    var words=DOMAINS[i].split(' ');
+    var fs=Math.max(7.5,Math.min(9,size*0.027));
+    ctx2.font='bold '+fs+'px Georgia,serif';
+    ctx2.fillStyle='rgba(74,53,32,0.88)';
+    if(words.length<=2){
+      ctx2.fillText(words[0],lx,ly-(words[1]?fs*0.55:0));
+      if(words[1])ctx2.fillText(words[1],lx,ly+fs*0.55);
+    } else {
+      ctx2.fillText(words[0]+' '+words[1],lx,ly-fs*0.55);
+      ctx2.fillText(words.slice(2).join(' '),lx,ly+fs*0.55);
+    }
+  }
+}
+
+function renderMilestones(){
+  var el=document.getElementById('milestone-grid');
+  if(!el)return;
+  el.innerHTML='';
+  MILESTONES.forEach(function(m){
+    var earned=earnedMilestone(m);
+    el.innerHTML+='<div class="milestone-card'+(earned?' earned':' locked')+'">'+
+      '<span class="milestone-icon">'+m.icon+'</span>'+
+      '<div class="milestone-name">'+m.name+'</div>'+
+      '<div class="milestone-desc">'+m.desc+'</div>'+
+      (earned?'<div class="milestone-earned-label">EARNED · +'+m.xp+' XP</div>':
+               '<div class="milestone-desc" style="margin-top:4px;font-size:10px;">🔒 Locked</div>')+
+      '</div>';
+  });
+}
+
+function renderDashBadges(){
+  var el=document.getElementById('badge-row');
+  if(!el)return;
+  el.innerHTML='';
+  var earned=MILESTONES.filter(function(m){return earnedMilestone(m);});
+  if(!earned.length){el.innerHTML='<div class="badge">📖 Journey Started</div>';return;}
+  earned.slice().reverse().slice(0,6).forEach(function(m){
+    el.innerHTML+='<div class="badge">'+m.icon+' '+m.name+'</div>';
+  });
+  if(earned.length>6) el.innerHTML+='<div class="badge">+'+(earned.length-6)+' more</div>';
+}
+
+function renderScripture(){
+  var el=document.getElementById('dash-scripture');
+  if(!el)return;
+  if(!S.faithOn){el.style.display='none';return;}
+  var sc=SCRIPTURES[new Date().getDate()%SCRIPTURES.length];
+  el.style.display='block';
+  el.innerHTML='<div class="scripture-block"><div class="scripture-ref">'+sc.ref+'</div><div class="scripture-text">'+sc.text+'</div></div>';
+}
+
+function renderLevel(){
+  var xp=calcXP(), lv=getLevel(xp), pct=getLevelProgress(xp);
+  var title=LEVEL_TITLES[lv]||'Forged';
+  var numEl=document.getElementById('dash-level-num');
+  var barEl=document.getElementById('dash-level-bar');
+  var xpEl=document.getElementById('dash-xp-label');
+  if(numEl)numEl.textContent=lv+1;
+  if(barEl)barEl.style.width=pct+'%';
+  if(xpEl) xpEl.textContent=xp+' XP · '+title;
+  // Sidebar
+  var sbar=document.getElementById('sidebar-level-fill');
+  var srank=document.getElementById('sidebar-rank-label');
+  if(sbar) sbar.style.width=pct+'%';
+  if(srank) srank.textContent=title+' · '+xp+' XP';
+}
+
+// ══════════════════════════════════════════════════════════
+//  PHASE 4 — AI COACH
+// ══════════════════════════════════════════════════════════
+var coachEnabled=false;
+var coachHistory=[];
+var coachBusy=false;
+
+var COACH_SYSTEM='You are the BECOMING Leadership Coach — a direct, experienced mentor built into the BECOMING app for fire officers and leaders in all fields. You are not a chatbot. You are a thinking partner.\n\n'+
+'FRAMEWORKS YOU KNOW DEEPLY:\n\n'+
+'Fire Service Leadership:\n'+
+'- John Norman: size-up (COAL WAS WEALTH), offensive/defensive decision-making, hose line placement — the first line goes between the fire and the lives in danger\n'+
+'- Frank Brannigan: building construction, truss collapse danger, collapse zones, parapet walls — the building is your enemy when it\'s on fire\n'+
+'- Anthony Kastros: command presence starts before you open your mouth, oral assessment centers, leadership under pressure\n'+
+'- Frank Viscuso: character before competence, crew culture is the officer\'s product, difficult conversations are a leadership obligation\n'+
+'- David Corley: 9 Leadership Ls — Leadership, Loyalty, Love, Learning, Legacy, Listening, Laughter, Labor, Letting Go\n'+
+'- Danny Cancino: Irreducible Complexity — character cannot be simplified out of the leadership equation\n'+
+'- Rick Lasky: pride, passion, brotherhood — the fire service reveals character, it doesn\'t build it\n'+
+'- John Salka: street-smart leadership — you don\'t get the crew you want, you get the crew you build\n\n'+
+'Organizational Leadership:\n'+
+'- John Maxwell: Law of the Lid, Law of Influence — your lid caps your crew\'s ceiling\n'+
+'- Jocko Willink & Leif Babin: Extreme Ownership — there is no one else to blame. Decentralized command.\n'+
+'- Urs Koenig: Radical Humility — tough on results, tender on people. Lead like a compass, not a control tower.\n'+
+'- Brené Brown: vulnerability is courage. Clear is kind. Rumble with hard conversations.\n'+
+'- Patrick Lencioni: trust is the foundation. Teams avoid conflict and call it harmony. Name the dysfunction.\n'+
+'- Simon Sinek: people follow why before what. Inspiration over manipulation.\n'+
+'- Stephen Covey: begin with the end. Seek first to understand. Sharpen the saw.\n'+
+'- Jim Collins: Level 5 — fierce will, deep humility. Good is the enemy of great.\n'+
+'- L. David Marquet: leader-leader, not leader-follower. Give intent, not orders.\n'+
+'- James Clear: identity before behavior. Systems over goals. 1% compounds.\n'+
+'- Urban Meyer: Above the Line — responsible/accountable/coachable vs. blame/excuses/denial. The standard is the standard. Unit cohesion is built deliberately.\n'+
+'- John Wooden: Pyramid of Success — industriousness and enthusiasm as cornerstones. Be quick but don\'t hurry. Success is peace of mind from full effort, not outcomes.\n'+
+'- Nick Saban: The Process — execute the next play, not the scoreboard. Elite standard is constant and non-negotiable. Preparation is the only reliable form of confidence.\n'+
+'- Robert Greenleaf / Simon Sinek (Servant Leadership): servant first, leader second. Leaders eat last. The culture replicates the leader — model what you want to see.\n\n'+
+'Faith (when enabled):\n'+
+'- Craig Groeschel: consistency over perfection, leadership as stewardship\n'+
+'- Andy Stanley: visioneering, Nehemiah principle, next generation leadership\n'+
+'- Oswald Chambers: surrender before service, character forged in the unseen\n'+
+'- C.S. Lewis: virtue as habit, pride as the root sin, humility as thinking of yourself less\n\n'+
+'OPERATING PRINCIPLES:\n'+
+'- Extreme ownership. No excuses.\n'+
+'- Feed the hungry, not the squeaky wheel. (DJ Stone)\n'+
+'- You promote what you permit.\n'+
+'- Be the spark. Just the spark.\n'+
+'- Radical humility: tough on results, tender on people.\n'+
+'- Character is irreducible from the leadership equation.\n'+
+'- Legacy thinking changes every decision.\n\n'+
+'HOW YOU COACH:\n'+
+'- Direct. No flattery. No opening affirmations.\n'+
+'- Ask one good question before giving a lecture when the situation is ambiguous.\n'+
+'- Draw on frameworks naturally — you don\'t always formally cite the book.\n'+
+'- Give something specific and actionable at the end of most responses.\n'+
+'- Keep responses focused and appropriately brief — fire officers are busy people.\n'+
+'- When someone describes a situation involving others, focus on what the leader can own and change, not on evaluating others.\n'+
+'- You are a leadership mentor, not a therapist or a lawyer.';
+
+function buildCoachContext(){
+  var ctx='\n\nUSER CONTEXT: Name is '+S.userName+'. ';
+  ctx+='Faith content is '+(S.faithOn?'enabled':'disabled')+'. ';
+  ctx+='Daily challenge streak: '+S.streak+' days. ';
+  ctx+='Lessons completed: '+S.completedLessons.length+'. ';
+  if(S.mission) ctx+='Personal mission: "'+S.mission+'". ';
+  if(S.vision) ctx+='Leadership vision: "'+S.vision+'". ';
+  var topD=DOMAINS.reduce(function(a,b){return (S.domains[b]||0)>(S.domains[a]||0)?b:a;});
+  var lowD=DOMAINS.reduce(function(a,b){return (S.domains[b]||0)<(S.domains[a]||0)?b:a;});
+  ctx+='Highest rated domain: '+topD+' ('+(S.domains[topD]||0)+'/10). ';
+  ctx+='Lowest rated domain: '+lowD+' ('+(S.domains[lowD]||0)+'/10). ';
+  if(S.commitment&&S.commitment.text) ctx+='Current 30-day commitment: "'+S.commitment.text+'". ';
+  return ctx;
+}
+
+function enableCoach(){
+  coachEnabled=true;
+  coachHistory=[];
+  document.getElementById('coach-disabled').style.display='none';
+  var ca=document.getElementById('coach-active');
+  ca.style.display='flex';
+  ca.style.flexDirection='column';
+  coachHistory.push({role:'assistant',content:'Ready. What are you working through?'});
+  renderCoachMessages();
+}
+
+function disableCoach(){
+  if(coachHistory.length>1&&!confirm('End this session? The conversation is not saved.')) return;
+  coachEnabled=false;
+  coachHistory=[];
+  document.getElementById('coach-disabled').style.display='flex';
+  document.getElementById('coach-active').style.display='none';
+}
+
+function newCoachSession(){
+  if(coachHistory.length>1&&!confirm('Clear this session and start fresh?')) return;
+  coachHistory=[];
+  coachHistory.push({role:'assistant',content:'New session. What are you working through?'});
+  renderCoachMessages();
+}
+
+function renderCoachMessages(){
+  var el=document.getElementById('coach-messages');
+  if(!el) return;
+  var html='';
+  coachHistory.forEach(function(msg){
+    var isUser=msg.role==='user';
+    html+='<div class="coach-bubble-wrap '+(isUser?'user':'assistant')+'">';
+    if(!isUser) html+='<div class="coach-sender">BECOMING COACH</div>';
+    html+='<div class="coach-bubble '+(isUser?'user':'assistant')+'">';
+    html+=msg.content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    html+='</div></div>';
+  });
+  el.innerHTML=html;
+  var content=document.getElementById('content');
+  if(content) setTimeout(function(){content.scrollTop=content.scrollHeight;},60);
+}
+
+function setCoachTyping(show){
+  var tw=document.getElementById('coach-typing-wrap');
+  if(tw) tw.style.display=show?'block':'none';
+  var btn=document.getElementById('coach-send-btn');
+  if(btn) btn.disabled=show;
+  if(show){
+    var content=document.getElementById('content');
+    if(content) setTimeout(function(){content.scrollTop=content.scrollHeight;},60);
+  }
+}
+
+function coachKeydown(e){
+  if(e.key==='Enter'&&!e.shiftKey){
+    e.preventDefault();
+    sendCoachMessage();
+  }
+}
+
+async function sendCoachMessage(){
+  var input=document.getElementById('coach-input');
+  if(!input||coachBusy) return;
+  var msg=input.value.trim();
+  if(!msg) return;
+
+  coachHistory.push({role:'user',content:msg});
+  input.value='';
+  coachBusy=true;
+  renderCoachMessages();
+  setCoachTyping(true);
+
+  try{
+    var response=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:COACH_SYSTEM+buildCoachContext(),
+        messages:coachHistory.map(function(m){return{role:m.role,content:m.content};})
+      })
+    });
+    var data=await response.json();
+    if(data.content&&data.content[0]&&data.content[0].text){
+      coachHistory.push({role:'assistant',content:data.content[0].text});
+    } else if(data.error){
+      coachHistory.push({role:'assistant',content:'API error: '+data.error.message+'. Check your connection.'});
+    } else {
+      coachHistory.push({role:'assistant',content:'Something went wrong. Try again.'});
+    }
+  }catch(err){
+    coachHistory.push({role:'assistant',content:'Connection issue. Check your network and try again.'});
+  }
+
+  coachBusy=false;
+  setCoachTyping(false);
+  renderCoachMessages();
+}
+
+// ══════════════════════════════════════════════════════════
+//  WRAP CORE SAVES TO TRIGGER PHASE 3+4 UPDATES
+// ══════════════════════════════════════════════════════════
+function p3Wrap(fn){
+  return function(){
+    var r=fn.apply(this,arguments);
+    checkMilestones(); renderLevel();
+    setTimeout(function(){drawRadar('radar-canvas',300);drawRadar('radar-canvas-full',320);},120);
+    return r;
+  };
+}
+
+var _orig_completeChallenge=completeChallenge; completeChallenge=p3Wrap(_orig_completeChallenge);
+var _orig_completeLesson=completeLesson;       completeLesson=p3Wrap(_orig_completeLesson);
+var _orig_saveJournal=saveJournal;             saveJournal=p3Wrap(_orig_saveJournal);
+var _orig_saveMission=saveMission;             saveMission=p3Wrap(_orig_saveMission);
+var _orig_saveVision=saveVision;               saveVision=p3Wrap(_orig_saveVision);
+var _orig_saveExpectDoc=saveExpectDoc;         saveExpectDoc=p3Wrap(_orig_saveExpectDoc);
+var _orig_addCrewNote=addCrewNote;             addCrewNote=p3Wrap(_orig_addCrewNote);
+var _orig_saveGrowth=saveGrowth;
+saveGrowth=function(){
+  _orig_saveGrowth();
+  checkMilestones(); renderLevel();
+  setTimeout(function(){drawRadar('radar-canvas',300);drawRadar('radar-canvas-full',320);},120);
+};
+
+// Full initApp with all phases
+var _baseInitApp=initApp;
+initApp=function(){
+  _baseInitApp();
+  renderLevel();
+  renderScripture();
+  renderDashBadges();
+  checkMilestones();
+  setTimeout(function(){
+    drawRadar('radar-canvas',300);
+    drawRadar('radar-canvas-full',320);
+    renderMilestones();
+  },120);
+};
+
+// switchTab with radar redraws + coach scroll
+var _baseSwitchTab=switchTab;
+switchTab=function(name){
+  _baseSwitchTab(name);
+  if(name==='dashboard') setTimeout(function(){drawRadar('radar-canvas',300);},100);
+  if(name==='growth') setTimeout(function(){drawRadar('radar-canvas-full',320);renderMilestones();},100);
+};
+
+// ══════════════════════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════════════════════
+load();
+if(S.userName){
+  document.getElementById('welcome').style.display='none';
+  document.getElementById('app').style.display='flex';
+  initApp();
+}
 </script>
 </body>
 </html>
